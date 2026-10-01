@@ -1,0 +1,575 @@
+/* =====================================================
+   THE DIGITAL MEDIA ARCANA - style.css
+   Sections:
+   1. Variables (colors, fonts)  - change the theme here!
+   2. Base / typography (Module 2)
+   3. Header
+   4. Intro
+   5. Card grid + card flip
+   6. Description bubble
+   7. Technical media spec table
+   8. Footer
+   9. Responsive rules (tablet / phone)
+   10. Reduced-motion rules
+   ===================================================== */
+
+
+/* ---------- 1. VARIABLES ----------
+   Custom properties (--name) are reusable values.
+   Edit them once here and the whole page updates. */
+:root {
+  /* Colors (theme: deep indigo + gold) */
+  --color-bg: #15132E;          /* page background */
+  --color-bar: #1E1B45;         /* header background */
+  --color-card-back: #2A2660;   /* face-down card */
+  --color-gold: #D4AF5A;        /* accent color */
+  --color-text-light: #EDE9FF;  /* text on dark backgrounds */
+  --color-muted: #A9A4CF;       /* small labels */
+  --color-parchment: #F6F0E0;   /* face-up card */
+  --color-ink: #1A1A1A;         /* headings on light backgrounds */
+  --color-ink-soft: #4D4D4D;    /* body text on light backgrounds */
+  --color-spec-bg: #F2F2F2;     /* spec section background */
+  --color-footer: #333333;
+
+  /* Font stack: Inter first, then safe fallbacks */
+  --font-main: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Card sizes */
+  --card-width: 260px;
+  --card-gap: 48px;
+  --columns: 3;   /* number of columns; changed in the responsive rules */
+}
+
+
+/* ---------- 2. BASE / TYPOGRAPHY (MODULE 2) ---------- */
+* {
+  box-sizing: border-box; /* padding is included in an element's width */
+}
+
+html {
+  scroll-behavior: smooth;  /* smooth scrolling for the nav links */
+  scroll-padding-top: 100px; /* keeps headings from hiding behind the header */
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-light);
+  font-family: var(--font-main);  /* sans-serif primary typeface */
+  font-size: 16px;
+  line-height: 1.5;               /* LEADING: between 1.4 and 1.6 */
+  font-kerning: normal;           /* KERNING: use the font's kerning pairs */
+}
+
+/* TRACKING (letter-spacing): 1% = 0.01em, so 8% = 0.08em */
+h1, h2, h3 { margin: 0; color: inherit; }
+
+a { color: inherit; }
+
+/* Text that only screen readers can see (used for the table caption) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* ---------- 3. HEADER ---------- */
+.site-header {
+  display: flex;
+  justify-content: space-between;  /* brand on the left, nav on the right */
+  align-items: center;
+  min-height: 88px;
+  padding: 0 64px;
+  background: var(--color-bar);
+  border-bottom: 1px solid rgba(212, 175, 90, 0.4);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  display: block;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border: 1.5px solid var(--color-gold);
+  border-radius: 50%;              /* circle */
+  color: var(--color-gold);        /* the SVG uses "currentColor", so it becomes gold */
+}
+.logo svg { display: block; width: 100%; height: 100%; }
+
+.site-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;          /* 2% tracking */
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.main-nav a {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;          /* 8% tracking */
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text-light);
+}
+.main-nav a:hover { color: var(--color-gold); }
+
+/* Pill-shaped audio button */
+.audio-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid var(--color-gold);
+  border-radius: 999px;            /* big radius = pill shape */
+  background: transparent;
+  color: var(--color-gold);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.audio-toggle:hover { background: rgba(212, 175, 90, 0.15); }
+
+/* Keyboard focus outline (important for accessibility) */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+
+/* ---------- 4. INTRO ---------- */
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 64px 240px 40px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;           /* 20% tracking */
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.intro h2 {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.01em;         /* -1% tracking */
+  line-height: 1.2;
+}
+
+.intro-text {
+  max-width: 820px;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--color-text-light);
+}
+
+.hint {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-gold);
+}
+
+
+/* ---------- 5. CARD GRID + CARD FLIP ---------- */
+.card-section {
+  padding: 24px 24px 80px;
+}
+
+/* position: relative makes this the "anchor" the bubble is placed against */
+.grid-wrapper {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* CSS Grid: --columns columns, each exactly one card wide.
+   Add more cards in script.js and new rows appear automatically. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), var(--card-width));
+  gap: var(--card-gap);
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The card itself is a <button> so it works with the keyboard.
+   We remove the default button look first. */
+.card {
+  display: block;
+  width: 100%;
+  aspect-ratio: 260 / 420;         /* portrait tarot ratio */
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  perspective: 1200px;             /* gives the flip its 3D depth */
+  transition: transform 0.2s ease;
+}
+
+/* STATE 1 - Idle: hover lifts the card slightly and adds a glow */
+.card:hover { transform: translateY(-4px); }
+.card:hover .card-back { box-shadow: 0 0 22px rgba(212, 175, 90, 0.45); }
+
+.card:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 6px;
+  border-radius: 20px;
+}
+
+/* card-inner is the part that actually rotates */
+.card-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;    /* keep the two faces in 3D space */
+  transition: transform 0.6s ease-in-out;  /* STATE 2 - Flipping: 0.6 s */
+}
+
+/* When JavaScript adds the class "flipped", rotate half a turn */
+.card.flipped .card-inner { transform: rotateY(180deg); }
+
+/* Rules shared by both faces */
+.card-face {
+  position: absolute;
+  inset: 0;                        /* stretch to fill card-inner */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 16px;
+  backface-visibility: hidden;     /* hide a face when it points away */
+  -webkit-backface-visibility: hidden;
+}
+
+/* ----- Face DOWN (card back) ----- */
+.card-back {
+  justify-content: center;
+  background: var(--color-card-back);
+  border: 2px solid var(--color-gold);
+  color: var(--color-gold);
+}
+
+/* Dashed inner border, inset 14px from the edge */
+.card-back::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1.5px dashed var(--color-gold);
+  border-radius: 10px;
+  opacity: 0.7;
+}
+
+.card-back-mark {                  /* the small ✦ at the top */
+  position: absolute;
+  top: 30px;
+  font-size: 18px;
+}
+
+.card-sigil {                      /* the SVG ring + star */
+  display: block;
+  width: 130px;
+  height: 130px;
+}
+
+/* ----- Face UP (revealed front) ----- */
+.card-front {
+  gap: 12px;
+  padding: 18px 16px;
+  background: var(--color-parchment);
+  border: 2px solid var(--color-ink);
+  color: var(--color-ink);
+  transform: rotateY(180deg);      /* starts turned away; flips into view with card-inner */
+}
+
+/* Extra shadow while a card is revealed */
+.card.flipped .card-front { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18); }
+
+.card-numeral {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* RASTER IMAGE: object-fit: cover crops the image to fill the box without stretching */
+.card-image {
+  display: block;
+  width: 100%;
+  height: 230px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #CFC7B0;             /* shows if the image is missing */
+}
+
+.card-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.card-subtitle {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+}
+
+.card-keyword {                    /* small pill tag */
+  display: block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #D9D2BD;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+
+/* ---------- 6. DESCRIPTION BUBBLE ---------- */
+.bubble {
+  position: absolute;              /* top/left are set by script.js */
+  z-index: 10;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px;
+  background: #FFFFFF;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-ink);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+  /* Hidden by default. Fading uses opacity + visibility. */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* JavaScript adds "open" to show it (STATE 4 - Described) */
+.bubble.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bubble-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bubble-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+}
+
+.bubble-close {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+/* Pointer triangle: a small rotated square that shows two of its borders */
+.bubble::before {
+  content: "";
+  position: absolute;
+  top: 24px;
+  width: 16px;
+  height: 16px;
+  background: #FFFFFF;
+}
+
+/* Bubble is to the RIGHT of the card -> triangle on the bubble's LEFT edge */
+.bubble.on-right::before {
+  left: -9px;
+  border-left: 1.5px solid var(--color-ink);
+  border-bottom: 1.5px solid var(--color-ink);
+  transform: rotate(45deg);
+}
+
+/* Bubble is to the LEFT of the card (rightmost column) -> triangle on the RIGHT edge */
+.bubble.on-left::before {
+  right: -9px;
+  border-right: 1.5px solid var(--color-ink);
+  border-top: 1.5px solid var(--color-ink);
+  transform: rotate(45deg);
+}
+
+
+/* ---------- 7. TECHNICAL MEDIA SPEC TABLE ---------- */
+.media-spec {
+  padding: 72px 160px 88px;
+  background: var(--color-spec-bg);
+  border-top: 1px solid #D1D1D1;
+  color: var(--color-ink-soft);
+}
+
+.media-spec h2 {
+  margin-bottom: 24px;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.005em;        /* -0.5% tracking */
+  color: var(--color-ink);
+}
+
+.table-wrap {
+  overflow-x: auto;                /* scroll sideways on small screens */
+  background: #FFFFFF;
+  border: 1px solid #D1D1D1;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;             /* 4 equal columns */
+  min-width: 640px;
+}
+
+thead th {
+  padding: 14px 20px;
+  background: #E6E6E6;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+tbody td {
+  padding: 16px 20px;
+  border-top: 1px solid #E0E0E0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+tbody td:first-child {             /* asset name column is bolder */
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* Zebra striping: every second row gets a light gray background */
+tbody tr:nth-child(even) { background: #F9F9F9; }
+
+
+/* ---------- 8. FOOTER ---------- */
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 80px;
+  padding: 0 64px;
+  background: var(--color-footer);
+  font-size: 13px;
+  color: #CFCFCF;
+}
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { color: var(--color-gold); }
+
+
+/* ---------- 9. RESPONSIVE RULES ----------
+   Media queries apply only when the screen is a certain width. */
+
+/* Tablet: 2 columns (640px - 1023px) */
+@media (max-width: 1023px) {
+  :root { --columns: 2; }
+
+  .site-header { padding: 16px 32px; flex-wrap: wrap; gap: 12px; }
+  .main-nav { gap: 24px; }
+  .intro { padding: 56px 48px 32px; }
+  .media-spec { padding: 56px 40px 64px; }
+}
+
+/* Phone: 1 column (under 640px) */
+@media (max-width: 639px) {
+  :root { --columns: 1; }
+
+  .site-header { padding: 16px 20px; }
+  .site-title { font-size: 18px; }
+  .main-nav { flex-wrap: wrap; gap: 14px 20px; }
+  .intro { padding: 40px 20px 24px; }
+  .intro h2 { font-size: 30px; }
+  .media-spec { padding: 40px 16px 48px; }
+  .site-footer { padding: 16px 20px; flex-direction: column; gap: 6px; }
+
+  /* Bubble becomes a BOTTOM SHEET fixed to the bottom of the screen.
+     script.js does not set top/left on phones. */
+  .bubble {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    border-radius: 14px 14px 0 0;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .bubble::before { display: none; } /* no pointer triangle on phones */
+}
+
+
+/* ---------- 10. REDUCED MOTION ----------
+   If the user's device asks for less animation, swap the 3D flip for a simple fade. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .card,
+  .card-inner,
+  .bubble { transition: none; }
+  .card:hover { transform: none; }
+
+  .card-inner,
+  .card.flipped .card-inner {
+    transform: none;               /* no rotation */
+    transform-style: flat;
+  }
+
+  .card-front { transform: none; opacity: 0; transition: opacity 0.3s ease; }
+  .card-back { transition: opacity 0.3s ease; }
+  .card.flipped .card-front { opacity: 1; }
+  .card.flipped .card-back { opacity: 0; }
+}

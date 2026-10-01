@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ============ HEAD: settings the browser reads before showing the page ============ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- makes the page responsive on phones -->
+
+  <!-- PLACEHOLDER: change the page title (shows in the browser tab) -->
+  <title>The Digital Media Arcana</title>
+
+  <!-- Google Fonts: loads the Inter typeface (Regular 400, Semi Bold 600, Bold 700) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Our own stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ============ SVG SPRITE (GRAPHICS REQUIREMENT) ============
+       We draw the sigil (ring + 8-point star) ONCE here as a <symbol>.
+       Then we reuse it with <use href="#sigil"> in the header logo and on every card back.
+       This block is invisible on its own. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="sigil" viewBox="0 0 100 100">
+      <!-- Outer ring -->
+      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3" />
+      <!-- 8-point star (16 points: 8 long tips alternating with 8 short dips) -->
+      <polygon
+        points="50,16 54.97,37.99 74.04,25.96 62.01,45.03 84,50 62.01,54.97 74.04,74.04 54.97,62.01 50,84 45.03,62.01 25.96,74.04 37.99,54.97 16,50 37.99,45.03 25.96,25.96 45.03,37.99"
+        fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" />
+    </symbol>
+  </svg>
+
+
+  <!-- ============ SECTION 1: HEADER / NAV BAR ============ -->
+  <header class="site-header">
+
+    <!-- Left side: logo + site title (H1) -->
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <!-- Logo = the same sigil from the sprite above -->
+        <svg viewBox="0 0 100 100"><use href="#sigil"></use></svg>
+      </span>
+      <!-- PLACEHOLDER: site title -->
+      <h1 class="site-title">The Digital Media Arcana</h1>
+    </div>
+
+    <!-- Right side: navigation links + audio button -->
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#intro">How to Read</a>
+      <a href="#media-spec">Media Spec</a>
+
+      <!-- AUDIO REQUIREMENT: button that plays/pauses the <audio> element below.
+           The JavaScript (script.js) changes the icon between ▶ and ❚❚ -->
+      <button id="audio-toggle" class="audio-toggle" type="button" aria-pressed="false">
+        <span id="audio-icon" aria-hidden="true">▶</span>
+        <span>Ambient Audio</span>
+      </button>
+    </nav>
+
+    <!-- Hidden HTML5 audio player. PLACEHOLDER: put your real file in the audio/ folder. -->
+    <audio id="ambient-audio" loop preload="none">
+      <source src="audio/ambient-audio.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </header>
+
+
+  <main>
+
+    <!-- ============ SECTION 2: INTRO DESCRIPTION ============ -->
+    <section id="intro" class="intro">
+      <p class="eyebrow">An Informative Tarot Reading of Digital Media</p>
+      <h2>Draw a Card. Uncover a Concept.</h2>
+      <!-- PLACEHOLDER: replace this paragraph with your own intro text (2-3 lines) -->
+      <p class="intro-text">
+        Every card contains a concept about Vector Graphics and a short informative description and a special illustration.
+        Unveil each card's secrets one by one and consume new knowledge about Digital Media. Click on the card to flip it and reveal it.  
+      </p>
+      <p class="hint">↓ Click a card to reveal its meaning</p>
+    </section>
+
+
+    <!-- ============ SECTION 3: CARD GRID ============ -->
+    <section id="card-section" class="card-section" aria-label="Card spread">
+
+      <!-- grid-wrapper: the description bubble is positioned relative to this box -->
+      <div class="grid-wrapper" id="grid-wrapper">
+
+        <!-- The cards are NOT written here by hand.
+             script.js reads the "cards" array and builds one <li> per card. -->
+        <ul class="card-grid" id="card-grid"></ul>
+
+        <!-- Description bubble (popover). One bubble is shared by all cards;
+             script.js fills in the title/text and moves it next to the active card. -->
+        <div class="bubble" id="bubble" role="dialog" aria-labelledby="bubble-title">
+          <h3 class="bubble-title" id="bubble-title"><!-- filled by JS --></h3>
+          <p class="bubble-body" id="bubble-body"><!-- filled by JS --></p>
+          <button class="bubble-close" id="bubble-close" type="button">✕ close</button>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============ SECTION 4: TECHNICAL MEDIA SPEC TABLE ============ -->
+    <section id="media-spec" class="media-spec">
+      <h2>Technical Media Spec</h2>
+
+      <!-- table-wrap lets the table scroll sideways on small phones -->
+      <div class="table-wrap">
+        <table>
+          <caption class="visually-hidden">Audit of the media assets embedded in this page</caption>
+          <thead>
+            <tr>
+              <th scope="col">Asset Name &amp; File Format</th>
+              <th scope="col">Original Size → Compressed</th>
+              <th scope="col">Color Depth / Quantization</th>
+              <th scope="col">Compression Algorithm</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PLACEHOLDER VALUES: replace each "—" with the real file sizes once your assets are optimized -->
+            <tr>
+              <td>card-back.svg</td>
+              <td>— KB → — KB</td>
+              <td>Vector (no bit depth)</td>
+              <td>Minified / GZIP</td>
+            </tr>
+            <tr>
+              <td>card-image-01.webp</td>
+              <td>— MB → — KB</td>
+              <td>8-bit per channel (24-bit)</td>
+              <td>Lossy (WebP / VP8)</td>
+            </tr>
+            <tr>
+              <td>ambient-audio.mp3</td>
+              <td>— MB → — KB</td>
+              <td>16-bit</td>
+              <td>Lossy (MP3, Huffman)</td>
+            </tr>
+            <!-- OPTIONAL 4th row: copy this row's format to add more assets -->
+            <tr>
+              <td>asset-name.ext</td>
+              <td>— → —</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ============ SECTION 5: FOOTER ============ -->
+  <footer class="site-footer">
+    <!-- PLACEHOLDER: put your name here -->
+    <span>© 2026 Student Name · Digital Media Midterm</span>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
+  <!-- JavaScript goes at the END of the body so the HTML above is already loaded when it runs -->
+  <script src="script.js"></script>
+</body>
+
+</html>
