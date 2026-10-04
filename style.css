@@ -47,7 +47,11 @@
 html {
   scroll-behavior: smooth;  /* smooth scrolling for the nav links */
   scroll-padding-top: 100px; /* keeps headings from hiding behind the header */
+  scrollbar-gutter: stable;  /* keep the scrollbar's space, so the page does not jump sideways */
 }
+
+/* While a card is drawn, the page does not scroll (script.js adds this class) */
+html.card-drawn { overflow: hidden; }
 
 body {
   margin: 0;
@@ -235,12 +239,29 @@ button:focus-visible {
   text-align: center;
   cursor: pointer;
   perspective: 1200px;             /* gives the flip its 3D depth */
-  transition: transform 0.2s ease;
+  position: relative;              /* needed so z-index works */
+  z-index: 0;
+  /* translate = the small hover lift (fast). transform = the zoom to the screen centre (slow).
+     z-index waits 0.6s, so a card going back stays on top until it has landed. */
+  transition: translate 0.2s ease,
+              transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+              z-index 0s 0.6s;
 }
 
 /* STATE 1 - Idle: hover lifts the card slightly and adds a glow */
-.card:hover { transform: translateY(-4px); }
+.card:hover { translate: 0 -4px; }
 .card:hover .card-back { box-shadow: 0 0 22px rgba(212, 175, 90, 0.45); }
+
+/* DRAWN CARD: the picked card rises to the middle of the screen and grows.
+   script.js works out the distance and size and stores them in --zoom-x, --zoom-y, --zoom-scale. */
+.card.flipped {
+  translate: none;
+  transform: translate(var(--zoom-x, 0px), var(--zoom-y, 0px)) scale(var(--zoom-scale, 1));
+  z-index: 16;                     /* above the backdrop (15), below the header (20) */
+  transition: translate 0.2s ease,
+              transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+              z-index 0s;
+}
 
 .card:focus-visible {
   outline: 3px solid var(--color-gold);
@@ -361,9 +382,25 @@ button:focus-visible {
 
 
 /* ---------- 6. DESCRIPTION BUBBLE ---------- */
+
+/* Dark layer that dims the page behind a drawn card. Clicking it puts the card back. */
+.backdrop {
+  position: fixed;
+  inset: 0;                        /* cover the whole screen */
+  z-index: 15;
+  background: rgba(10, 8, 30, 0.75);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.backdrop.show {
+  opacity: 1;
+  visibility: visible;
+}
+
 .bubble {
   position: absolute;              /* top/left are set by script.js */
-  z-index: 10;
+  z-index: 17;                     /* above the drawn card (16) */
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -430,19 +467,11 @@ button:focus-visible {
   background: #FFFFFF;
 }
 
-/* Bubble is to the RIGHT of the card -> triangle on the bubble's LEFT edge */
-.bubble.on-right::before {
+/* The bubble sits to the RIGHT of the drawn card -> triangle on the bubble's LEFT edge */
+.bubble::before {
   left: -9px;
   border-left: 1.5px solid var(--color-ink);
   border-bottom: 1.5px solid var(--color-ink);
-  transform: rotate(45deg);
-}
-
-/* Bubble is to the LEFT of the card (rightmost column) -> triangle on the RIGHT edge */
-.bubble.on-left::before {
-  right: -9px;
-  border-right: 1.5px solid var(--color-ink);
-  border-top: 1.5px solid var(--color-ink);
   transform: rotate(45deg);
 }
 
@@ -553,6 +582,11 @@ tbody td:first-child {             /* asset name column is bolder */
     overflow-y: auto;
   }
   .bubble::before { display: none; } /* no pointer triangle on phones */
+
+  /* Small screens: the drawn card needs all the room, so it also covers the header (20) */
+  .backdrop { z-index: 25; }
+  .card.flipped { z-index: 26; }
+  .bubble { z-index: 27; }
 }
 
 
@@ -562,9 +596,11 @@ tbody td:first-child {             /* asset name column is bolder */
   html { scroll-behavior: auto; }
 
   .card,
+  .card.flipped,
   .card-inner,
+  .backdrop,
   .bubble { transition: none; }
-  .card:hover { transform: none; }
+  .card:hover { translate: none; }
 
   .card-inner,
   .card.flipped .card-inner {

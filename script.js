@@ -117,6 +117,8 @@ const bubble = document.getElementById("bubble");
 const bubbleTitle = document.getElementById("bubble-title");
 const bubbleBody = document.getElementById("bubble-body");
 const bubbleClose = document.getElementById("bubble-close");
+const backdrop = document.getElementById("backdrop");
+const siteHeader = document.querySelector(".site-header");
 const audio = document.getElementById("ambient-audio");
 const audioToggle = document.getElementById("audio-toggle");
 const audioIcon = document.getElementById("audio-icon");
@@ -182,11 +184,9 @@ function buildCards() {
 // Runs whenever a card is clicked
 function handleCardClick(index) {
 
-  // Case 1: the card is already flipped -> flip it back and close the bubble
+  // Case 1: the card is already flipped -> put it back and close the bubble
   if (activeIndex === index) {
-    closeBubble(false);
-    flipCard(index, false);
-    activeIndex = null;
+    putCardBack(false);
     return;
   }
 
@@ -198,18 +198,34 @@ function handleCardClick(index) {
 
   // Case 3: flip the clicked card, then show the bubble AFTER the flip ends
   activeIndex = index;
+  fillBubble(index);      // write the text first, so the bubble's size is known
   flipCard(index, true);
   waitForFlip(index, function () {
     openBubble(index);
   });
 }
 
-// Turns a card face up (true) or face down (false)
+// Puts the drawn card back in the grid, face down, and closes the bubble.
+// If returnFocus is true, keyboard focus goes back to the card.
+function putCardBack(returnFocus) {
+  if (activeIndex === null) return;
+
+  closeBubble(returnFocus);
+  flipCard(activeIndex, false);
+  activeIndex = null;
+}
+
+// Turns a card face up (true) or face down (false).
+// Face up also "draws" the card: it rises to the middle of the screen and grows.
 function flipCard(index, faceUp) {
   const button = cardButtons[index];
   const data = cards[index];
 
+  if (faceUp) placeDrawnCard(index);                // tell the CSS where to move the card
+
   button.classList.toggle("flipped", faceUp);       // adds/removes the "flipped" class
+  backdrop.classList.toggle("show", faceUp);        // dim the page behind a drawn card
+  document.documentElement.classList.toggle("card-drawn", faceUp);  // stop page scrolling (style.css)
   button.setAttribute("aria-pressed", faceUp);      // tells screen readers the state
 
   // Update the label that screen readers announce
@@ -218,6 +234,61 @@ function flipCard(index, faceUp) {
   } else {
     button.setAttribute("aria-label", "Card " + (index + 1) + " of " + cards.length + ", face down. Press to reveal.");
   }
+}
+
+const bubbleWidth = 300;  // must match the width in style.css
+const bubbleGap = 12;     // space between the drawn card and the bubble
+
+// Works out where a drawn card should sit on the screen and how big it should be.
+// Returns the move (x, y), the scale, and the card's final left/right/top edges.
+function getDrawnPosition(index) {
+  // The <li> is the card's slot in the grid. It never moves, so we measure from it.
+  const slot = cardButtons[index].parentElement.getBoundingClientRect();
+
+  const isPhone = window.innerWidth < 640;
+  const margin = isPhone ? 16 : 24;                             // breathing room around the card
+  const screenWidth = document.body.clientWidth;                // page width without the scrollbar
+  const screenHeight = window.innerHeight;
+
+  // On phones the drawn card covers the header (see style.css), so the header takes no space
+  const headerBottom = isPhone ? 0 : Math.max(siteHeader.getBoundingClientRect().bottom, 0);
+
+  // Space kept free for the bubble: beside the card, or (on phones) the bottom sheet
+  const sideSpace = isPhone ? 0 : bubbleGap + bubbleWidth;
+  const bottomSpace = isPhone ? bubble.offsetHeight : 0;
+
+  const freeWidth = screenWidth - sideSpace - margin * 2;
+  const freeHeight = screenHeight - headerBottom - bottomSpace - margin * 2;
+
+  // Grow up to 1.5x, but never bigger than the free space (and never tiny)
+  let scale = Math.min(1.5, freeWidth / slot.width, freeHeight / slot.height);
+  scale = Math.max(scale, 0.6);
+
+  // The middle of the free space is where the card's centre should end up
+  const centerX = (screenWidth - sideSpace) / 2;
+  const centerY = headerBottom + (screenHeight - headerBottom - bottomSpace) / 2;
+
+  const width = slot.width * scale;
+  const height = slot.height * scale;
+
+  return {
+    x: centerX - (slot.left + slot.width / 2),
+    y: centerY - (slot.top + slot.height / 2),
+    scale: scale,
+    left: centerX - width / 2,
+    right: centerX + width / 2,
+    top: centerY - height / 2
+  };
+}
+
+// Stores the move and scale as CSS variables; ".card.flipped" in style.css uses them
+function placeDrawnCard(index) {
+  const position = getDrawnPosition(index);
+  const button = cardButtons[index];
+
+  button.style.setProperty("--zoom-x", position.x + "px");
+  button.style.setProperty("--zoom-y", position.y + "px");
+  button.style.setProperty("--zoom-scale", position.scale);
 }
 
 // Waits until the flip animation is finished, then runs "callback"
@@ -242,8 +313,8 @@ function waitForFlip(index, callback) {
 
 /* ---------- 5. DESCRIPTION BUBBLE ---------- */
 
-// Fill the bubble with a card's text, place it, and fade it in
-function openBubble(index) {
+// Write a card's title and description into the (still hidden) bubble
+function fillBubble(index) {
   const data = cards[index];
 
   // Title format: "III · THE PRINTER — EPS". The concept goes in its own
@@ -256,7 +327,10 @@ function openBubble(index) {
   bubbleTitle.appendChild(concept);
   // innerHTML (not textContent) so <code> tags inside a description work
   bubbleBody.innerHTML = data.description;
+}
 
+// Place the bubble next to the drawn card and fade it in
+function openBubble(index) {
   positionBubble(index);
   bubble.classList.add("open");
 
@@ -272,93 +346,64 @@ function closeBubble(returnFocus) {
   bubble.classList.remove("open");
 
   if (wasOpen && returnFocus && activeIndex !== null) {
-    cardButtons[activeIndex].focus();
+    // preventScroll: the card is still flying back, so don't let the page chase it
+    cardButtons[activeIndex].focus({ preventScroll: true });
   }
 }
 
-// Put the bubble beside the card: right side by default, left if there is no room
+// Put the bubble beside the drawn card, on its right side
 function positionBubble(index) {
 
   // On phones the CSS turns the bubble into a bottom sheet, so clear our positions
   if (window.innerWidth < 640) {
     bubble.style.top = "";
     bubble.style.left = "";
-    bubble.classList.remove("on-right", "on-left");
     return;
   }
 
-  // getBoundingClientRect gives an element's position on the screen
-  const cardBox = cardButtons[index].getBoundingClientRect();
+  // Where the drawn card ends up on the screen, and where the wrapper is.
+  // The bubble's top/left are measured from the wrapper, so we subtract its position.
+  const cardBox = getDrawnPosition(index);
   const wrapBox = gridWrapper.getBoundingClientRect();
 
-  const bubbleWidth = 300;  // must match the width in style.css
-  const gap = 12;           // space between card and bubble
-  const roomOnRight = window.innerWidth - cardBox.right;
-
-  let left;
-  if (roomOnRight >= bubbleWidth + gap + 16) {
-    // Enough room: place bubble to the right of the card
-    left = cardBox.right - wrapBox.left + gap;
-    bubble.classList.add("on-right");
-    bubble.classList.remove("on-left");
-  } else {
-    // Not enough room (rightmost column): place bubble to the left
-    left = cardBox.left - wrapBox.left - gap - bubbleWidth;
-    bubble.classList.add("on-left");
-    bubble.classList.remove("on-right");
-  }
-
-  // Bubble starts about 70px below the top of the card
-  const top = cardBox.top - wrapBox.top + 70;
+  const left = cardBox.right - wrapBox.left + bubbleGap;
+  const top = cardBox.top - wrapBox.top + 40;   // a little below the top of the card
 
   bubble.style.left = left + "px";
   bubble.style.top = top + "px";
 }
 
-// --- Ways to close the bubble ---
+// --- Ways to put the card back (this also closes the bubble) ---
 
 // 1. Click the ✕ close button
 bubbleClose.addEventListener("click", function () {
-  closeBubble(true);
+  putCardBack(true);
 });
 
 // 2. Press the Esc key
 document.addEventListener("keydown", function (event) {
-  if (event.key === "Escape" && bubble.classList.contains("open")) {
-    closeBubble(true);
+  if (event.key === "Escape") {
+    putCardBack(true);
   }
 });
 
-// 3. Click anywhere outside the bubble and outside a card
+// 3. Click the dimmed area (anywhere outside the bubble, the cards, and the header)
 document.addEventListener("click", function (event) {
   const clickedInsideBubble = bubble.contains(event.target);
   const clickedACard = event.target.closest(".card");
+  const clickedHeader = siteHeader.contains(event.target);
 
-  if (bubble.classList.contains("open") && !clickedInsideBubble && !clickedACard) {
-    closeBubble(false);
+  if (!clickedInsideBubble && !clickedACard && !clickedHeader) {
+    putCardBack(false);
   }
 });
 
-// The open bubble is wider than a card, so it covers the card next to it.
-// If a click lands on the bubble but there is a card underneath, flip that card.
-bubble.addEventListener("click", function (event) {
-  if (event.target.closest(".bubble-close")) return;       // the close button works as usual
-  if (window.getSelection().toString() !== "") return;     // user was selecting text
-
-  // elementsFromPoint lists everything under the pointer, top to bottom
-  const under = document.elementsFromPoint(event.clientX, event.clientY);
-  for (const element of under) {
-    const index = cardButtons.indexOf(element.closest(".card"));
-    if (index !== -1) {
-      handleCardClick(index);
-      return;
-    }
-  }
-});
-
-// If the window is resized while the bubble is open, move it to the right spot
+// If the window is resized while a card is drawn, move the card and the bubble to the new centre
 window.addEventListener("resize", function () {
-  if (bubble.classList.contains("open") && activeIndex !== null) {
+  if (activeIndex === null) return;
+
+  placeDrawnCard(activeIndex);
+  if (bubble.classList.contains("open")) {
     positionBubble(activeIndex);
   }
 });

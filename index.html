@@ -95,6 +95,9 @@
              script.js reads the "cards" array and builds one <li> per card. -->
         <ul class="card-grid" id="card-grid"></ul>
 
+        <!-- Dark layer shown behind a drawn (zoomed-in) card. script.js shows and hides it. -->
+        <div class="backdrop" id="backdrop"></div>
+
         <!-- Description bubble (popover). One bubble is shared by all cards;
              script.js fills in the title/text and moves it next to the active card. -->
         <div class="bubble" id="bubble" role="dialog" aria-labelledby="bubble-title">
