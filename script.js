@@ -14,7 +14,13 @@
 /* ---------- 1. CARD DATA ----------
    Each { ... } is one card. To add a card, copy one block and edit it;
    the grid adds a new card (and a new row when needed) automatically.
-   PLACEHOLDER: rewrite the text and swap the image files as you like. */
+
+   accent = the stained-glass color of the card's keyword pill and title bar.
+   To change it, write one of: "blue", "amber", "magenta", "violet".
+
+   image = the picture on the face-up card. The files live in the images/ folder.
+   To swap one, put the new file in images/ and change the path here
+   Use a PNG with a transparent background (about 520 px wide), so the card color shows through. */
 const cards = [
   {
     numeral: "I",
@@ -22,8 +28,9 @@ const cards = [
     concept: "Geometric Primitives",
     subtitle: "Geometric Primitives",
     keyword: "BUILDING BLOCKS",
-    image: "images/card-image-01.webp",
-    imageAlt: "Placeholder: close-up of a pixel grid",
+    accent: "blue",
+    image: "images/geometric-primitives.png",
+    imageAlt: "Icon of a cone, a sphere and a cube drawn as simple outlined shapes",
     description: "Geometric primitives are the simplest shapes a vector image is made from. They include lines, polylines, circles, rectangles, ellipses, and polygons. Even a detailed illustration, like a car, is just many primitives layered and combined. Because each primitive is stored as math instead of pixels, it stays sharp at any size."
   },
   {
@@ -32,8 +39,9 @@ const cards = [
     concept: "Bézier Curves",
     subtitle: "Bézier Curves",
     keyword: "SMOOTH PATHS",
-    image: "images/card-image-02.webp",
-    imageAlt: "Placeholder: simple vector shape with anchor points",
+    accent: "amber",
+    image: "images/bezier-curve.png",
+    imageAlt: "Icon of a pen tool drawing a curve with anchor points and control handles",
     description: "A Bézier curve is a parametric curve named after Pierre Bézier, who used it to design Renault car bodies in the 1960s. A cubic Bézier is defined by four points. P0 and P3 are where the curve starts and ends, and P1 and P2 are control points that pull the curve into shape. Unlike a polygonal line made of short straight segments, a Bézier curve looks smooth at every scale."
   },
   {
@@ -42,8 +50,9 @@ const cards = [
     concept: "EPS",
     subtitle: "EPS (Encapsulated PostScript)",
     keyword: "PRINT STANDARD",
-    image: "images/card-image-03.webp",
-    imageAlt: "Placeholder: blurry raster next to a sharp vector",
+    accent: "magenta",
+    image: "images/eps.png",
+    imageAlt: "EPS file icon with a pen nib on it",
     description: "EPS is Adobe's format from the 1980s and has long been the standard interchange format of the print industry. It is a PostScript-based file that describes an image or drawing, so it works directly with PostScript printers. Designers still use it to send logos and artwork to print shops."
   },
   {
@@ -52,8 +61,9 @@ const cards = [
     concept: "Ai",
     subtitle: "Ai (Adobe Illustrator)",
     keyword: "NATIVE FORMAT",
-    image: "images/card-image-04.webp",
-    imageAlt: "Placeholder: color gradient with visible banding",
+    accent: "violet",
+    image: "images/ai.png",
+    imageAlt: "Adobe Illustrator logo: orange letters Ai on a dark square",
     description: "Ai is the native file format of Adobe Illustrator, first released in 1987. It stores single-page vector artwork and began as a modified version of the EPS format. Because Illustrator is an industry-standard tool, Ai files are widely supported across design software."
   },
   {
@@ -62,8 +72,9 @@ const cards = [
     concept: "SVG",
     subtitle: "SVG (Scalable Vector Graphics)",
     keyword: "OPEN STANDARD",
-    image: "images/card-image-05.webp",
-    imageAlt: "Placeholder: flat-color image with repeating rows",
+    accent: "blue",
+    image: "images/svg.png",
+    imageAlt: "SVG file icon showing a curve with anchor points",
     description: "SVG is the W3C's standard vector format, introduced in 1999. It is written in XML, so you can open an SVG and read its shapes as plain text code. It also supports interactivity and animation, which is why browsers can display it natively. The card backs on this site are SVG."
   },
   {
@@ -72,8 +83,9 @@ const cards = [
     concept: "SWF",
     subtitle: "SWF (ShockWave Flash)",
     keyword: "WEB ANIMATION",
-    image: "images/card-image-06.webp",
-    imageAlt: "Placeholder: photo with visible JPEG blocks",
+    accent: "amber",
+    image: "images/swf.png",
+    imageAlt: "SWF file icon with the red Flash logo",
     description: "SWF is the Flash file format, created by Macromedia in 1996 and later acquired by Adobe. Its name comes from \"ShockWave Flash.\" It powered animated websites, games, and cartoons in the early web, but browsers phased it out after Flash Player reached end of life in 2020."
   },
   {
@@ -82,8 +94,9 @@ const cards = [
     concept: "Scaling",
     subtitle: "Scaling Transformation",
     keyword: "ZOOM",
-    image: "images/card-image-07.webp",
-    imageAlt: "Placeholder: file size comparison of image formats",
+    accent: "magenta",
+    image: "images/scale.png",
+    imageAlt: "Icon of a small square growing into a larger square, with an arrow",
     description: "Scaling changes the size of an object by expanding or compressing its dimensions. It works by multiplying the original coordinates by a scaling factor: X′ = X · Sx and Y′ = Y · Sy. Because vectors are stored as coordinates, scaling them up never causes pixelation."
   },
   {
@@ -92,8 +105,9 @@ const cards = [
     concept: "Rotation",
     subtitle: "Rotation Transformation",
     keyword: "ANGLED SPIN",
-    image: "images/card-image-08.webp",
-    imageAlt: "Placeholder: bezier curve with control handles",
+    accent: "violet",
+    image: "images/rotate.png",
+    imageAlt: "3D cube with a circular arrow around it, showing rotation",
     description: "Rotation turns an object by a particular angle, called theta (θ), around its origin. Every point in the shape is repositioned using that angle while the shape itself stays intact. In code, this is the <code>rotate()</code> function."
   },
   {
@@ -102,8 +116,9 @@ const cards = [
     concept: "Translation",
     subtitle: "Translation",
     keyword: "DIRECTIONAL SHIFT",
-    image: "images/card-image-09.webp",
-    imageAlt: "Placeholder: icons for photo, logo, and screenshot",
+    accent: "blue",
+    image: "images/translation.png",
+    imageAlt: "Icon of a square with arrows pointing up, down, left and right",
     description: "Translation moves an object to a different position on the screen without changing its size or shape. Each point is moved by adding translation values to its original coordinates: X′ = X + tx and Y′ = Y + ty. In code, this is the <code>translate()</code> function."
   }
 ];
@@ -132,6 +147,66 @@ let activeIndex = null;   // which card is flipped right now (null = none)
 
 
 /* ---------- 3. BUILD THE CARDS FROM THE DATA ---------- */
+
+/* CARD BACK (GRAPHICS REQUIREMENT): the same artwork as images/card-back.svg,
+   written as inline SVG so the browser draws it as real vector shapes.
+   - stroke="currentColor" takes the gold color set on .card-back-art in style.css.
+   - The small 4-point stars use <use href="#spark">. The "spark" shape is defined
+     ONCE in index.html (the hidden SVG sprite), not once per card, so the page
+     never has two elements with the same id. */
+const cardBackSvg = `
+  <svg class="card-back-art" viewBox="0 0 260 420" aria-hidden="true">
+    <!-- Card body -->
+    <rect class="card-back-body" x="1" y="1" width="258" height="418" rx="16" stroke="currentColor" stroke-width="2"/>
+
+    <!-- Double frame: outer line + inner cut corners -->
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="14" y="14" width="232" height="392" rx="8" stroke-width="1.2"/>
+      <path d="M26 40 L26 30 Q26 26 30 26 L40 26 M220 26 L230 26 Q234 26 234 30 L234 40 M234 380 L234 390 Q234 394 230 394 L220 394 M40 394 L30 394 Q26 394 26 390 L26 380" stroke-width="1"/>
+    </g>
+
+    <!-- Top: small sun -->
+    <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" transform="translate(130 62)">
+      <circle r="7"/>
+      <path d="M0 -12 V-17 M0 12 V17 M-12 0 H-17 M12 0 H17"/>
+      <path d="M8.5 -8.5 L12 -12 M-8.5 -8.5 L-12 -12 M8.5 8.5 L12 12 M-8.5 8.5 L-12 12"/>
+    </g>
+
+    <!-- Center: all-seeing eye inside a sunburst ring -->
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(130 210)">
+      <g stroke-width="1.2">
+        <path d="M0 -62 V-84 M0 62 V84 M-62 0 H-84 M62 0 H84"/>
+        <path d="M44 -44 L60 -60 M-44 -44 L-60 -60 M44 44 L60 60 M-44 44 L-60 60"/>
+        <path d="M24 -57 L31 -77 M-24 -57 L-31 -77 M24 57 L31 77 M-24 57 L-31 77"/>
+        <path d="M57 -24 L77 -31 M-57 -24 L-77 -31 M57 24 L77 31 M-57 24 L-77 31"/>
+      </g>
+      <circle r="56" stroke-width="1.4"/>
+      <circle r="48" stroke-width="0.8" stroke-dasharray="2 4"/>
+      <path d="M-34 0 Q0 -30 34 0 Q0 30 -34 0 Z" stroke-width="1.6"/>
+      <circle r="13" stroke-width="1.4"/>
+      <circle r="5" fill="currentColor" stroke="none"/>
+      <path d="M0 -26 V-34 M-16 -22 L-20 -29 M16 -22 L20 -29" stroke-width="1.2"/>
+    </g>
+
+    <!-- Bottom: crescent moon -->
+    <path d="M140 338 A22 22 0 1 1 118 318 A17 17 0 1 0 140 338 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+
+    <!-- Stars. The four small ones twinkle (see "twinkle" in style.css). -->
+    <g fill="currentColor">
+      <use href="#spark" x="130" y="372"/>
+      <g class="card-back-stars">
+        <use href="#spark" x="52" y="120" transform="translate(52 120) scale(0.6) translate(-52 -120)"/>
+        <use href="#spark" x="208" y="120" transform="translate(208 120) scale(0.6) translate(-208 -120)"/>
+        <use href="#spark" x="52" y="300" transform="translate(52 300) scale(0.6) translate(-52 -300)"/>
+        <use href="#spark" x="208" y="300" transform="translate(208 300) scale(0.6) translate(-208 -300)"/>
+      </g>
+      <circle cx="70" cy="80" r="1.4"/><circle cx="190" cy="80" r="1.4"/>
+      <circle cx="70" cy="345" r="1.4"/><circle cx="190" cy="345" r="1.4"/>
+      <circle cx="40" cy="210" r="1.4"/><circle cx="220" cy="210" r="1.4"/>
+    </g>
+  </svg>
+`;
+
 function buildCards() {
   // forEach runs the code below once for every card in the array
   cards.forEach(function (data, index) {
@@ -141,23 +216,18 @@ function buildCards() {
 
     // Write the card's HTML. ${...} inserts values from the data.
     item.innerHTML = `
-      <button class="card" type="button" aria-pressed="false"
+      <button class="card" type="button" aria-pressed="false" data-accent="${data.accent}"
               aria-label="Card ${index + 1} of ${cards.length}, face down. Press to reveal.">
         <span class="card-inner">
 
-          <!-- FACE DOWN (back of the card) -->
-          <span class="card-face card-back">
-            <span class="card-back-mark" aria-hidden="true">✦</span>
-            <svg class="card-sigil" viewBox="0 0 100 100" aria-hidden="true">
-              <use href="#sigil"></use>
-            </svg>
-          </span>
+          <!-- FACE DOWN (back of the card): inline SVG, see cardBackSvg above -->
+          <span class="card-face card-back">${cardBackSvg}</span>
 
           <!-- FACE UP (front of the card) -->
           <span class="card-face card-front">
             <span class="card-numeral">${data.numeral}</span>
             <img class="card-image" src="${data.image}" alt="${data.imageAlt}"
-                 width="228" height="230" loading="lazy">
+                 width="224" height="230" loading="lazy">
             <span class="card-title">${data.title}</span>
             <span class="card-subtitle">${data.subtitle}</span>
             <span class="card-keyword">${data.keyword}</span>

@@ -21,18 +21,14 @@
 <body>
 
   <!-- ============ SVG SPRITE (GRAPHICS REQUIREMENT) ============
-       We draw the sigil (ring + 8-point star) ONCE here as a <symbol>.
-       Then we reuse it with <use href="#sigil"> in the header logo and on every card back.
+       The small 4-point star ("spark") is drawn ONCE here.
+       Every card back reuses it with <use href="#spark"> (see cardBackSvg in script.js),
+       so the id "spark" exists only one time on the page.
        This block is invisible on its own. -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="sigil" viewBox="0 0 100 100">
-      <!-- Outer ring -->
-      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3" />
-      <!-- 8-point star (16 points: 8 long tips alternating with 8 short dips) -->
-      <polygon
-        points="50,16 54.97,37.99 74.04,25.96 62.01,45.03 84,50 62.01,54.97 74.04,74.04 54.97,62.01 50,84 45.03,62.01 25.96,74.04 37.99,54.97 16,50 37.99,45.03 25.96,25.96 45.03,37.99"
-        fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" />
-    </symbol>
+    <defs>
+      <path id="spark" d="M0 -7 L1.6 -1.6 L7 0 L1.6 1.6 L0 7 L-1.6 1.6 L-7 0 L-1.6 -1.6 Z" />
+    </defs>
   </svg>
 
 
@@ -42,8 +38,15 @@
     <!-- Left side: logo + site title (H1) -->
     <div class="brand">
       <span class="logo" aria-hidden="true">
-        <!-- Logo = the same sigil from the sprite above -->
-        <svg viewBox="0 0 100 100"><use href="#sigil"></use></svg>
+        <!-- Logo = a small version of the eye on the card back (ring, eye, short rays).
+             stroke="currentColor" takes the gold color set on .logo in style.css. -->
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="20" cy="20" r="18.5" stroke-width="1.5" />
+          <path d="M8 20 Q20 9 32 20 Q20 31 8 20 Z" stroke-width="1.5" />
+          <circle cx="20" cy="20" r="4.5" stroke-width="1.3" />
+          <circle cx="20" cy="20" r="1.7" fill="currentColor" stroke="none" />
+          <path d="M20 5 V9 M20 31 V35 M11 8 L13 11 M29 8 L27 11 M11 32 L13 29 M29 32 L27 29" stroke-width="1.3" />
+        </svg>
       </span>
       <!-- PLACEHOLDER: site title -->
       <h1 class="site-title">The Digital Media Arcana</h1>
@@ -62,7 +65,11 @@
       </button>
     </nav>
 
-    <!-- Hidden HTML5 audio player. PLACEHOLDER: put your real file in the audio/ folder. -->
+    <!-- Hidden HTML5 audio player. It never starts by itself (no autoplay):
+         it only plays when the button above is clicked.
+         loop = when the 41-minute track ends it starts again, so there is no silence.
+         preload="none" = the 38 MB file is only downloaded once the user presses play. -->
+    <!-- Replace with the final track. Credit it in the footer. -->
     <audio id="ambient-audio" loop preload="none">
       <source src="audio/ambient-audio.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
@@ -127,31 +134,76 @@
             </tr>
           </thead>
           <tbody>
-            <!-- PLACEHOLDER VALUES: replace each "—" with the real file sizes once your assets are optimized -->
+            <!-- One row per media file used on this page.
+                 "raw" = the size the image would be with no compression (width x height x 4 bytes per pixel).
+                 All card images are PNG with a transparent background (the alpha channel).
+                 The audio "PCM" size = the same 41:57 as uncompressed 16-bit, 48 kHz stereo sound.
+                 If you swap a file, update its row. -->
             <tr>
               <td>card-back.svg</td>
-              <td>— KB → — KB</td>
+              <td>10.8 KB → 2.6 KB (0.9 KB gzipped)</td>
               <td>Vector (no bit depth)</td>
               <td>Minified / GZIP</td>
             </tr>
             <tr>
-              <td>card-image-01.webp</td>
-              <td>— MB → — KB</td>
-              <td>8-bit per channel (24-bit)</td>
-              <td>Lossy (WebP / VP8)</td>
+              <td>geometric-primitives.png</td>
+              <td>956.8 KB raw → 6.3 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
             </tr>
             <tr>
-              <td>ambient-audio.mp3</td>
-              <td>— MB → — KB</td>
-              <td>16-bit</td>
-              <td>Lossy (MP3, Huffman)</td>
+              <td>bezier-curve.png</td>
+              <td>1.03 MB raw → 70.6 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
             </tr>
-            <!-- OPTIONAL 4th row: copy this row's format to add more assets -->
             <tr>
-              <td>asset-name.ext</td>
-              <td>— → —</td>
-              <td>—</td>
-              <td>—</td>
+              <td>eps.png</td>
+              <td>881.1 KB raw → 12.2 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>ai.png</td>
+              <td>454.2 KB raw → 29.5 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>svg.png</td>
+              <td>838.9 KB raw → 24.0 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>swf.png</td>
+              <td>284.8 KB raw → 11.6 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>scale.png</td>
+              <td>972.7 KB raw → 4.6 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>rotate.png</td>
+              <td>894.5 KB raw → 127.8 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>translation.png</td>
+              <td>1.03 MB raw → 16.6 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>ambient-audio.mp3 (41:57, looped)</td>
+              <td>461 MB as PCM → 38.4 MB</td>
+              <td>16-bit, 48 kHz stereo</td>
+              <td>Lossy (MP3, 128 kbps, Huffman)</td>
             </tr>
           </tbody>
         </table>
@@ -163,8 +215,12 @@
 
   <!-- ============ SECTION 5: FOOTER ============ -->
   <footer class="site-footer">
-    <!-- PLACEHOLDER: put your name here -->
-    <span>© 2026 Student Name · Digital Media Midterm</span>
+    <div class="footer-text">
+      <!-- PLACEHOLDER: put your name here -->
+      <span>© 2026 Student Name · Digital Media Midterm</span>
+      <!-- Music credit. PLACEHOLDER: add the artist / composer after the title. -->
+      <span class="footer-credit">Music: Chiral Redundancy Part 1 Menu Music (OTs-14 Theme)</span>
+    </div>
     <a href="#top">Back to top ↑</a>
   </footer>
 

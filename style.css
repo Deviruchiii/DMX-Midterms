@@ -18,16 +18,38 @@
    Custom properties (--name) are reusable values.
    Edit them once here and the whole page updates. */
 :root {
-  /* Colors (theme: deep indigo + gold) */
-  --color-bg: #15132E;          /* page background */
-  --color-bar: #1E1B45;         /* header and footer background */
-  --color-card-back: #2A2660;   /* face-down card */
-  --color-gold: #D4AF5A;        /* accent color */
-  --color-text-light: #EDE9FF;  /* text on dark backgrounds */
-  --color-muted: #A9A4CF;       /* small labels */
-  --color-parchment: #F6F0E0;   /* face-up card */
-  --color-ink: #1A1A1A;         /* headings on light backgrounds */
-  --color-ink-soft: #4D4D4D;    /* body text on light backgrounds */
+  /* Colors (theme: dark cathedral stone, candlelight gold, stained glass) */
+
+  /* Backgrounds: darkest to lightest */
+  --bg-deepest:  #0A0806;  /* page background */
+  --bg-glow:     #1B130E;  /* soft light at the top of the page */
+  --bg-base:     #140F0B;  /* header and footer */
+  --bg-raised:   #251C16;  /* face-up cards, bubble */
+  --bg-stripe:   #2E231C;  /* spare: zebra rows, if you want them back */
+  --border-warm: #3F3128;  /* hairlines, table borders */
+  --card-back-body: #1A0F11;  /* fill of the face-down card (same as card-back.svg) */
+
+  /* Warm browns (muted parts of the page) */
+  --brown-mid:   #5A493E;
+  --brown-light: #746254;
+  --text-muted:  #A8927C;  /* eyebrow, small labels */
+
+  /* Text */
+  --text-main:   #E8E0D5;  /* body text and headings */
+  --text-soft:   #BAABA0;  /* secondary text */
+
+  /* Candlelight gold (main accent) */
+  --gold:        #DDB15A;  /* borders, link hover, active states */
+  --gold-deep:   #B8743F;  /* subtle borders */
+  --gold-card:   #D9A94F;  /* card-back line art */
+
+  /* Stained-glass accents: used only for thin lines on the cards.
+     They are too dark to be readable as small text, so text stays --text-main. */
+  --glass-blue:    #3F6FD0;
+  --glass-amber:   #F0A02E;
+  --glass-magenta: #D0508C;
+  --glass-violet:  #8B6FE0;
+  --rose:          #C05163;
 
   /* Font stack: Inter first, then safe fallbacks */
   --font-main: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -55,8 +77,9 @@ html.card-drawn { overflow: hidden; }
 
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text-light);
+  /* dark stone, with a faint warm glow at the top of the page */
+  background: var(--bg-deepest) radial-gradient(ellipse at top, var(--bg-glow) 0%, var(--bg-deepest) 70%);
+  color: var(--text-main);
   font-family: var(--font-main);  /* sans-serif primary typeface */
   font-size: 16px;
   line-height: 1.5;               /* LEADING: between 1.4 and 1.6 */
@@ -67,6 +90,9 @@ body {
 h1, h2, h3 { margin: 0; color: inherit; }
 
 a { color: inherit; }
+
+/* Color of text highlighted with the mouse */
+::selection { background: var(--gold); color: var(--bg-deepest); }
 
 /* Text that only screen readers can see (used for the table caption) */
 .visually-hidden {
@@ -83,14 +109,14 @@ a { color: inherit; }
 .site-header {
   position: sticky;                /* stays at the top while the page scrolls */
   top: 0;
-  z-index: 20;                     /* above the cards and the bubble (z-index 10) */
+  z-index: 20;                     /* above the cards, the backdrop and the bubble */
   display: flex;
   justify-content: space-between;  /* brand on the left, nav on the right */
   align-items: center;
   min-height: 88px;
   padding: 0 64px;
-  background: var(--color-bar);
-  border-bottom: 1px solid rgba(212, 175, 90, 0.4);
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--gold-deep);
 }
 
 .brand {
@@ -99,14 +125,12 @@ a { color: inherit; }
   gap: 14px;
 }
 
+/* The logo SVG draws its own ring, so the box needs no border */
 .logo {
   display: block;
   width: 40px;
   height: 40px;
-  padding: 5px;
-  border: 1.5px solid var(--color-gold);
-  border-radius: 50%;              /* circle */
-  color: var(--color-gold);        /* the SVG uses "currentColor", so it becomes gold */
+  color: var(--gold);              /* the SVG uses "currentColor", so it becomes gold */
 }
 .logo svg { display: block; width: 100%; height: 100%; }
 
@@ -128,9 +152,9 @@ a { color: inherit; }
   letter-spacing: 0.08em;          /* 8% tracking */
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--color-text-light);
+  color: var(--text-main);
 }
-.main-nav a:hover { color: var(--color-gold); }
+.main-nav a:hover { color: var(--gold); }
 
 /* Pill-shaped audio button */
 .audio-toggle {
@@ -138,22 +162,22 @@ a { color: inherit; }
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  border: 1px solid var(--color-gold);
+  border: 1px solid var(--gold);
   border-radius: 999px;            /* big radius = pill shape */
   background: transparent;
-  color: var(--color-gold);
+  color: var(--gold);
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.04em;
   cursor: pointer;
 }
-.audio-toggle:hover { background: rgba(212, 175, 90, 0.15); }
+.audio-toggle:hover { background: var(--gold); color: var(--bg-deepest); }
 
 /* Keyboard focus outline (important for accessibility) */
 a:focus-visible,
 button:focus-visible {
-  outline: 3px solid var(--color-gold);
+  outline: 2px solid var(--gold);
   outline-offset: 3px;
 }
 
@@ -174,7 +198,7 @@ button:focus-visible {
   font-weight: 600;
   letter-spacing: 0.2em;           /* 20% tracking */
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--text-muted);
 }
 
 .intro h2 {
@@ -189,7 +213,7 @@ button:focus-visible {
   margin: 0;
   font-size: 18px;
   line-height: 1.5;
-  color: var(--color-text-light);
+  color: var(--text-soft);
 }
 
 .hint {
@@ -197,7 +221,7 @@ button:focus-visible {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: var(--color-gold);
+  color: var(--gold);
 }
 
 
@@ -250,7 +274,14 @@ button:focus-visible {
 
 /* STATE 1 - Idle: hover lifts the card slightly and adds a glow */
 .card:hover { translate: 0 -4px; }
-.card:hover .card-back { box-shadow: 0 0 22px rgba(212, 175, 90, 0.45); }
+.card:hover .card-back { box-shadow: 0 0 22px rgba(221, 177, 90, 0.35); }
+
+/* Each card has one stained-glass accent. script.js writes data-accent on the card;
+   these rules turn that word into the --accent color used further down. */
+.card[data-accent="blue"]    { --accent: var(--glass-blue); }
+.card[data-accent="amber"]   { --accent: var(--glass-amber); }
+.card[data-accent="magenta"] { --accent: var(--glass-magenta); }
+.card[data-accent="violet"]  { --accent: var(--glass-violet); }
 
 /* DRAWN CARD: the picked card rises to the middle of the screen and grows.
    script.js works out the distance and size and stores them in --zoom-x, --zoom-y, --zoom-scale. */
@@ -264,7 +295,7 @@ button:focus-visible {
 }
 
 .card:focus-visible {
-  outline: 3px solid var(--color-gold);
+  outline: 2px solid var(--gold);
   outline-offset: 6px;
   border-radius: 20px;
 }
@@ -294,48 +325,44 @@ button:focus-visible {
   -webkit-backface-visibility: hidden;
 }
 
-/* ----- Face DOWN (card back) ----- */
+/* ----- Face DOWN (card back) -----
+   The inline SVG draws its own dark body and gold frame,
+   so this face has no background or border of its own. */
 .card-back {
-  justify-content: center;
-  background: var(--color-card-back);
-  border: 2px solid var(--color-gold);
-  color: var(--color-gold);
+  overflow: hidden;                /* clip the artwork to the rounded corners */
 }
 
-/* Dashed inner border, inset 14px from the edge */
-.card-back::before {
-  content: "";
-  position: absolute;
-  inset: 14px;
-  border: 1.5px dashed var(--color-gold);
-  border-radius: 10px;
-  opacity: 0.7;
-}
-
-.card-back-mark {                  /* the small ✦ at the top */
-  position: absolute;
-  top: 30px;
-  font-size: 18px;
-}
-
-.card-sigil {                      /* the SVG ring + star */
+/* The SVG fills the whole face */
+.card-back-art {
   display: block;
-  width: 130px;
-  height: 130px;
+  width: 100%;
+  height: 100%;
+  color: var(--gold-card);         /* every stroke="currentColor" in the SVG becomes gold */
+}
+.card-back-body { fill: var(--card-back-body); }
+
+/* The four small stars slowly fade in and out */
+.card-back-stars { animation: twinkle 4s ease-in-out infinite; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
 }
 
 /* ----- Face UP (revealed front) ----- */
 .card-front {
   gap: 12px;
   padding: 18px 16px;
-  background: var(--color-parchment);
-  border: 2px solid var(--color-ink);
-  color: var(--color-ink);
+  background: var(--bg-raised);
+  border: 2px solid var(--gold);
+  color: var(--text-main);
   transform: rotateY(180deg);      /* starts turned away; flips into view with card-inner */
 }
 
-/* Extra shadow while a card is revealed */
-.card.flipped .card-front { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18); }
+/* Extra shadow and a soft gold glow while a card is revealed */
+.card.flipped .card-front {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 24px rgba(221, 177, 90, 0.25);
+}
 
 .card-numeral {
   display: block;
@@ -344,18 +371,22 @@ button:focus-visible {
   letter-spacing: 0.1em;
 }
 
-/* RASTER IMAGE: object-fit: cover crops the image to fill the box without stretching */
+/* RASTER IMAGE: object-fit: contain shows the whole picture without cropping or stretching.
+   The pictures are PNGs with a transparent background and the box has no fill,
+   so the card color shows through and the picture sits directly on the card. */
 .card-image {
   display: block;
   width: 100%;
   height: 230px;
-  border-radius: 8px;
-  object-fit: cover;
-  background: #CFC7B0;             /* shows if the image is missing */
+  object-fit: contain;
+  background: transparent;
 }
 
+/* The thin colored bar under the title is the card's accent */
 .card-title {
   display: block;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--accent, var(--gold));
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -366,20 +397,20 @@ button:focus-visible {
   display: block;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--color-ink-soft);
+  color: var(--text-soft);
 }
 
-.card-keyword {                    /* small pill tag */
+.card-keyword {                    /* small pill tag: see-through, outlined in the accent */
   display: block;
   padding: 4px 10px;
+  border: 1px solid var(--accent, var(--gold));
   border-radius: 999px;
-  background: #D9D2BD;
+  background: transparent;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-
 
 /* ---------- 6. DESCRIPTION BUBBLE ---------- */
 
@@ -388,7 +419,7 @@ button:focus-visible {
   position: fixed;
   inset: 0;                        /* cover the whole screen */
   z-index: 15;
-  background: rgba(10, 8, 30, 0.75);
+  background: rgba(10, 8, 6, 0.8);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.6s ease, visibility 0.6s ease;
@@ -406,11 +437,11 @@ button:focus-visible {
   flex-direction: column;
   gap: 10px;
   padding: 20px 22px;
-  background: #FFFFFF;
-  color: var(--color-ink);
-  border: 1.5px solid var(--color-ink);
+  background: var(--bg-raised);
+  color: var(--text-main);
+  border: 1.5px solid var(--gold);
   border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 
   /* Hidden by default. Fading uses opacity + visibility. */
   opacity: 0;
@@ -442,7 +473,7 @@ button:focus-visible {
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--color-ink-soft);
+  color: var(--text-soft);
 }
 
 .bubble-close {
@@ -453,25 +484,26 @@ button:focus-visible {
   font-family: inherit;
   font-size: 11px;
   font-weight: 600;
-  color: var(--color-ink);
+  color: var(--gold);
   cursor: pointer;
 }
 
-/* Pointer triangle: a small rotated square that shows two of its borders */
+/* Pointer triangle: a small rotated square that shows two of its borders.
+   It uses the same fill and border color as the bubble, so it blends in. */
 .bubble::before {
   content: "";
   position: absolute;
   top: 24px;
   width: 16px;
   height: 16px;
-  background: #FFFFFF;
+  background: var(--bg-raised);
 }
 
 /* The bubble sits to the RIGHT of the drawn card -> triangle on the bubble's LEFT edge */
 .bubble::before {
   left: -9px;
-  border-left: 1.5px solid var(--color-ink);
-  border-bottom: 1.5px solid var(--color-ink);
+  border-left: 1.5px solid var(--gold);
+  border-bottom: 1.5px solid var(--gold);
   transform: rotate(45deg);
 }
 
@@ -480,7 +512,7 @@ button:focus-visible {
 .media-spec {
   padding: 72px 160px 88px;
   /* no background: the section shows the page background, so it blends in */
-  color: var(--color-muted);
+  color: var(--text-soft);
 }
 
 .media-spec h2 {
@@ -488,13 +520,13 @@ button:focus-visible {
   font-size: 32px;
   font-weight: 700;
   letter-spacing: -0.005em;        /* -0.5% tracking */
-  color: var(--color-text-light);
+  color: var(--text-main);
 }
 
-/* The table is transparent: only thin gold lines separate it from the page */
+/* The table is transparent: only thin warm lines separate it from the page */
 .table-wrap {
   overflow-x: auto;                /* scroll sideways on small screens */
-  border: 1px solid rgba(212, 175, 90, 0.4);
+  border: 1px solid var(--border-warm);
   border-radius: 8px;
 }
 
@@ -512,19 +544,20 @@ thead th {
   letter-spacing: 0.08em;
   text-align: left;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--gold);
 }
 
 tbody td {
   padding: 16px 20px;
-  border-top: 1px solid rgba(212, 175, 90, 0.25);
+  border-top: 1px solid var(--border-warm);
   font-size: 14px;
   line-height: 1.5;
 }
 
 tbody td:first-child {             /* asset name column is bolder */
   font-weight: 600;
-  color: var(--color-text-light);
+  color: var(--text-main);
+  overflow-wrap: anywhere;         /* long file names wrap instead of overflowing */
 }
 
 
@@ -533,15 +566,27 @@ tbody td:first-child {             /* asset name column is bolder */
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   min-height: 80px;
-  padding: 0 64px;
-  background: var(--color-bar);    /* same bar color and gold line as the header */
-  border-top: 1px solid rgba(212, 175, 90, 0.4);
+  padding: 12px 64px;
+  background: var(--bg-base);      /* same bar color and line as the header */
+  border-top: 1px solid var(--gold-deep);
   font-size: 13px;
-  color: var(--color-text-light);
+  color: var(--text-main);
 }
 .site-footer a { text-decoration: none; }
-.site-footer a:hover { color: var(--color-gold); }
+.site-footer a:hover { color: var(--gold); }
+
+/* Left side of the footer: name line with the music credit under it */
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.footer-credit {
+  font-size: 12px;
+  color: var(--text-muted);
+}
 
 
 /* ---------- 9. RESPONSIVE RULES ----------
@@ -601,6 +646,7 @@ tbody td:first-child {             /* asset name column is bolder */
   .backdrop,
   .bubble { transition: none; }
   .card:hover { translate: none; }
+  .card-back-stars { animation: none; }  /* no twinkle */
 
   .card-inner,
   .card.flipped .card-inner {
