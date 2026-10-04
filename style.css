@@ -20,7 +20,7 @@
 :root {
   /* Colors (theme: deep indigo + gold) */
   --color-bg: #15132E;          /* page background */
-  --color-bar: #1E1B45;         /* header background */
+  --color-bar: #1E1B45;         /* header and footer background */
   --color-card-back: #2A2660;   /* face-down card */
   --color-gold: #D4AF5A;        /* accent color */
   --color-text-light: #EDE9FF;  /* text on dark backgrounds */
@@ -28,7 +28,6 @@
   --color-parchment: #F6F0E0;   /* face-up card */
   --color-ink: #1A1A1A;         /* headings on light backgrounds */
   --color-ink-soft: #4D4D4D;    /* body text on light backgrounds */
-  --color-footer: #333333;
 
   /* Font stack: Inter first, then safe fallbacks */
   --font-main: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -507,9 +506,10 @@ tbody td:first-child {             /* asset name column is bolder */
   align-items: center;
   min-height: 80px;
   padding: 0 64px;
-  background: var(--color-footer);
+  background: var(--color-bar);    /* same bar color and gold line as the header */
+  border-top: 1px solid rgba(212, 175, 90, 0.4);
   font-size: 13px;
-  color: #CFCFCF;
+  color: var(--color-text-light);
 }
 .site-footer a { text-decoration: none; }
 .site-footer a:hover { color: var(--color-gold); }
