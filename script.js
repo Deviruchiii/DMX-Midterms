@@ -483,6 +483,9 @@ window.addEventListener("resize", function () {
 
 // Play the audio if it is paused, pause it if it is playing
 audioToggle.addEventListener("click", function () {
+  // The visitor is using the button now, so the "first action" helper below is not needed
+  stopWaitingForFirstAction();
+
   if (audio.paused) {
     // play() returns a promise; .catch handles errors (e.g. file missing)
     audio.play().catch(function (error) {
@@ -491,6 +494,33 @@ audioToggle.addEventListener("click", function () {
   } else {
     audio.pause();
   }
+});
+
+// --- Start the music automatically ---
+// Browsers usually block sound until the visitor has clicked or pressed a key.
+// So we try to play right away, and if the browser says no, we wait for the
+// visitor's first click or key press and start the music then.
+
+// Runs on the visitor's first click or key press
+function startOnFirstAction() {
+  audio.play()
+    .then(stopWaitingForFirstAction)   // it worked: stop listening
+    .catch(function () {
+      // Still blocked (some keys do not count as an action). Keep waiting for the next one.
+    });
+}
+
+// Removes the two "first action" listeners so the music is not started twice
+function stopWaitingForFirstAction() {
+  document.removeEventListener("click", startOnFirstAction);
+  document.removeEventListener("keydown", startOnFirstAction);
+}
+
+// Try to play as soon as the page opens
+audio.play().catch(function () {
+  // Blocked by the browser: start on the first click or key press instead
+  document.addEventListener("click", startOnFirstAction);
+  document.addEventListener("keydown", startOnFirstAction);
 });
 
 // Change the button icon whenever the audio starts or stops

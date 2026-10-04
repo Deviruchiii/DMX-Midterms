@@ -65,10 +65,11 @@
       </button>
     </nav>
 
-    <!-- Hidden HTML5 audio player. It never starts by itself (no autoplay):
-         it only plays when the button above is clicked.
+    <!-- Hidden HTML5 audio player. script.js starts it when the page opens.
+         Browsers often block sound until the visitor does something, so if that happens
+         the music starts on the visitor's first click or key press instead.
          loop = when the 41-minute track ends it starts again, so there is no silence.
-         preload="none" = the 38 MB file is only downloaded once the user presses play. -->
+         preload="none" = the 38 MB file is only downloaded once the music starts. -->
     <!-- Replace with the final track. Credit it in the footer. -->
     <audio id="ambient-audio" loop preload="none">
       <source src="audio/ambient-audio.mp3" type="audio/mpeg">
@@ -216,8 +217,7 @@
   <!-- ============ SECTION 5: FOOTER ============ -->
   <footer class="site-footer">
     <div class="footer-text">
-      <!-- PLACEHOLDER: put your name here -->
-      <span>© 2026 Student Name · Digital Media Midterm</span>
+      <span>© 2026 Aldrin Paltao · Digital Media Midterm</span>
       <!-- Music credit. PLACEHOLDER: add the artist / composer after the title. -->
       <span class="footer-credit">Music: Chiral Redundancy Part 1 Menu Music (OTs-14 Theme)</span>
     </div>
