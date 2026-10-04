@@ -393,6 +393,13 @@ button:focus-visible {
   text-transform: uppercase;
 }
 
+/* The "— concept" part of the title: normal case so it reads as a term */
+.bubble-concept {
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .bubble-body {
   margin: 0;
   font-size: 14px;

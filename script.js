@@ -18,81 +18,90 @@
 const cards = [
   {
     numeral: "I",
-    title: "The Pixel",
-    subtitle: "Raster graphics",
-    keyword: "Raster",
+    title: "THE ARCHITECT",
+    concept: "Geometric Primitives",
+    subtitle: "Geometric Primitives",
+    keyword: "BUILDING BLOCKS",
     image: "images/card-image-01.webp",
     imageAlt: "Placeholder: close-up of a pixel grid",
     description: "A raster image is a grid of tiny squares called pixels, and each pixel stores one color value. The image's size is its width times its height in pixels. Editing changes individual pixels, which makes raster ideal for photographs. The detail is fixed when the image is created, though."
   },
   {
     numeral: "II",
-    title: "The Path",
-    subtitle: "Vector graphics",
-    keyword: "Vector",
+    title: "THE WEAVER",
+    concept: "Bézier Curves",
+    subtitle: "Bézier Curves",
+    keyword: "SMOOTH PATHS",
     image: "images/card-image-02.webp",
     imageAlt: "Placeholder: simple vector shape with anchor points",
     description: "A vector image does not store pixels. It stores shapes as math: points, lines, and curves, plus a fill color and a stroke. The file describes how to draw the picture instead of what every pixel looks like. SVG is the standard vector format on the web."
   },
   {
     numeral: "III",
-    title: "The Scale",
-    subtitle: "Resolution independence",
-    keyword: "Scaling",
+    title: "THE PRINTER",
+    concept: "EPS",
+    subtitle: "EPS (Encapsulated PostScript)",
+    keyword: "PRINT STANDARD",
     image: "images/card-image-03.webp",
     imageAlt: "Placeholder: blurry raster next to a sharp vector",
     description: "When you enlarge a raster image, the software has to invent new pixels, so the picture turns blurry or blocky. A vector image is simply redrawn at the new size and stays sharp. Its file size also stays the same no matter how large it is displayed."
   },
   {
     numeral: "IV",
-    title: "The Palette",
-    subtitle: "Color depth",
-    keyword: "Bit depth",
+    title: "THE ILLUSTRATOR",
+    concept: "Ai",
+    subtitle: "Ai (Adobe Illustrator)",
+    keyword: "NATIVE FORMAT",
     image: "images/card-image-04.webp",
     imageAlt: "Placeholder: color gradient with visible banding",
     description: "Color depth is the number of bits used for each pixel. Using 8 bits for each of the red, green, and blue channels gives 24-bit color, which is about 16.7 million colors. An indexed image uses 8 bits total, so it can show only 256 colors picked from a lookup table (LUT). Fewer bits make smaller files but can cause visible banding in gradients."
   },
   {
     numeral: "V",
-    title: "The Repeater",
-    subtitle: "Lossless compression",
-    keyword: "Lossless",
+    title: "THE SCRIBE",
+    concept: "SVG",
+    subtitle: "SVG (Scalable Vector Graphics)",
+    keyword: "OPEN STANDARD",
     image: "images/card-image-05.webp",
     imageAlt: "Placeholder: flat-color image with repeating rows",
     description: "Lossless compression shrinks a file without throwing anything away. Run-length encoding (RLE) stores a run such as '20 white pixels' instead of listing each pixel. PNG uses the DEFLATE method, which combines LZ77 and Huffman coding. You get the exact original back, which suits logos, text, and flat colors."
   },
   {
     numeral: "VI",
-    title: "The Sacrifice",
-    subtitle: "Lossy compression",
-    keyword: "Lossy",
+    title: "THE PHANTOM",
+    concept: "SWF",
+    subtitle: "SWF (ShockWave Flash)",
+    keyword: "WEB ANIMATION",
     image: "images/card-image-06.webp",
     imageAlt: "Placeholder: photo with visible JPEG blocks",
     description: "Lossy compression permanently removes detail that people rarely notice. JPEG splits the image into 8x8 blocks, converts each block with a DCT (discrete cosine transform), and then quantizes it to drop fine detail. The files become much smaller. Saving again and again adds visible blocky artifacts."
   },
   {
     numeral: "VII",
-    title: "The Modern Format",
-    subtitle: "WebP",
-    keyword: "WebP",
+    title: "THE GIANT",
+    concept: "Scaling",
+    subtitle: "Scaling Transformation",
+    keyword: "ZOOM",
     image: "images/card-image-07.webp",
     imageAlt: "Placeholder: file size comparison of image formats",
     description: "WebP is a modern raster format that supports lossy compression (based on the VP8 video codec), lossless compression, and transparency. At similar visual quality its files are usually smaller than JPEG or PNG. All major browsers support it, so it is a good default for web photos."
   },
   {
     numeral: "VIII",
-    title: "The Curve",
-    subtitle: "Bezier curves",
-    keyword: "Bezier",
+    title: "THE WHEEL",
+    concept: "Rotation",
+    subtitle: "Rotation Transformation",
+    keyword: "ANGLED SPIN",
     image: "images/card-image-08.webp",
     imageAlt: "Placeholder: bezier curve with control handles",
     description: "A Bezier curve is defined by anchor points and control handles. Dragging a handle bends the curve smoothly without adding any new points. A few numbers can describe a complex outline, which is why vector shapes stay so small. This is what the pen tool in a drawing program creates."
   },
   {
     numeral: "IX",
-    title: "The Choice",
-    subtitle: "Choosing a format",
-    keyword: "Trade-off",
+    title: "THE TRAVELER",
+    concept: "Translation",
+    subtitle: "Translation",
+    keyword: "DIRECTIONAL SHIFT",
     image: "images/card-image-09.webp",
     imageAlt: "Placeholder: icons for photo, logo, and screenshot",
     description: "Pick the format that matches the content. Photographs work best as lossy raster (WebP or JPEG). Logos, icons, and diagrams work best as SVG. Screenshots with sharp text are best kept lossless, such as PNG. Every choice trades file size against quality and flexibility."
@@ -237,7 +246,14 @@ function waitForFlip(index, callback) {
 function openBubble(index) {
   const data = cards[index];
 
-  bubbleTitle.textContent = data.numeral + " · " + data.title;
+  // Title format: "III · THE PRINTER — EPS". The concept goes in its own
+  // <span> so the CSS can show it in normal case instead of uppercase.
+  const concept = document.createElement("span");
+  concept.className = "bubble-concept";
+  concept.textContent = "— " + data.concept;
+
+  bubbleTitle.textContent = data.numeral + " · " + data.title + " ";
+  bubbleTitle.appendChild(concept);
   bubbleBody.textContent = data.description;
 
   positionBubble(index);
@@ -319,6 +335,23 @@ document.addEventListener("click", function (event) {
 
   if (bubble.classList.contains("open") && !clickedInsideBubble && !clickedACard) {
     closeBubble(false);
+  }
+});
+
+// The open bubble is wider than a card, so it covers the card next to it.
+// If a click lands on the bubble but there is a card underneath, flip that card.
+bubble.addEventListener("click", function (event) {
+  if (event.target.closest(".bubble-close")) return;       // the close button works as usual
+  if (window.getSelection().toString() !== "") return;     // user was selecting text
+
+  // elementsFromPoint lists everything under the pointer, top to bottom
+  const under = document.elementsFromPoint(event.clientX, event.clientY);
+  for (const element of under) {
+    const index = cardButtons.indexOf(element.closest(".card"));
+    if (index !== -1) {
+      handleCardClick(index);
+      return;
+    }
   }
 });
 
