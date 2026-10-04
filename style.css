@@ -9,8 +9,9 @@
    6. Description bubble
    7. Technical media spec table
    8. Footer
-   9. Responsive rules (tablet / phone)
-   10. Reduced-motion rules
+   9. Entrance screen
+   10. Responsive rules (tablet / phone)
+   11. Reduced-motion rules
    ===================================================== */
 
 
@@ -72,8 +73,10 @@ html {
   scrollbar-gutter: stable;  /* keep the scrollbar's space, so the page does not jump sideways */
 }
 
-/* While a card is drawn, the page does not scroll (script.js adds this class) */
-html.card-drawn { overflow: hidden; }
+/* While a card is drawn, or the entrance screen is up, the page does not scroll
+   (script.js adds these classes) */
+html.card-drawn,
+html.entrance-open { overflow: hidden; }
 
 body {
   margin: 0;
@@ -589,7 +592,69 @@ tbody td:first-child {             /* asset name column is bolder */
 }
 
 
-/* ---------- 9. RESPONSIVE RULES ----------
+/* ---------- 9. ENTRANCE SCREEN ----------
+   A full-screen layer shown when the site opens. Clicking its button starts the music. */
+.entrance {
+  position: fixed;
+  inset: 0;                        /* cover the whole screen */
+  z-index: 100;                    /* above everything, including the header (20) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+  text-align: center;
+  background: var(--bg-deepest) radial-gradient(ellipse at center, var(--bg-glow) 0%, var(--bg-deepest) 70%);
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+/* script.js adds "hidden" after the button is clicked: the screen fades away */
+.entrance.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.entrance-logo {
+  width: 96px;
+  height: 96px;
+  color: var(--gold);              /* the SVG uses "currentColor" */
+}
+
+.entrance-title {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* Gold pill button, the same shape as the audio button in the header */
+.entrance-button {
+  margin-top: 12px;
+  padding: 14px 32px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gold);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.entrance-button:hover { background: var(--gold); color: var(--bg-deepest); }
+
+.entrance-note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+
+/* ---------- 10. RESPONSIVE RULES ----------
    Media queries apply only when the screen is a certain width. */
 
 /* Tablet: 2 columns (640px - 1023px) */
@@ -611,6 +676,7 @@ tbody td:first-child {             /* asset name column is bolder */
   .main-nav { flex-wrap: wrap; gap: 14px 20px; }
   .intro { padding: 40px 20px 24px; }
   .intro h2 { font-size: 30px; }
+  .entrance-title { font-size: 30px; }
   .media-spec { padding: 40px 16px 48px; }
   .site-footer { padding: 16px 20px; flex-direction: column; gap: 6px; }
 
@@ -635,7 +701,7 @@ tbody td:first-child {             /* asset name column is bolder */
 }
 
 
-/* ---------- 10. REDUCED MOTION ----------
+/* ---------- 11. REDUCED MOTION ----------
    If the user's device asks for less animation, swap the 3D flip for a simple fade. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -644,7 +710,9 @@ tbody td:first-child {             /* asset name column is bolder */
   .card.flipped,
   .card-inner,
   .backdrop,
-  .bubble { transition: none; }
+  .bubble,
+  .entrance,
+  .entrance-button { transition: none; }
   .card:hover { translate: none; }
   .card-back-stars { animation: none; }  /* no twinkle */
 

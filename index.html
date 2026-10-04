@@ -32,6 +32,27 @@
   </svg>
 
 
+  <!-- ============ ENTRANCE SCREEN ============
+       Covers the whole page when the site opens. Browsers do not let a page play sound
+       until the visitor clicks something, so the "Enter" button is that first click:
+       script.js starts the music and fades this screen away. -->
+  <div class="entrance" id="entrance" role="dialog" aria-modal="true" aria-labelledby="entrance-title">
+    <svg class="entrance-logo" viewBox="0 0 40 40" fill="none" stroke="currentColor"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <!-- the same eye as the header logo, drawn larger -->
+      <circle cx="20" cy="20" r="18.5" stroke-width="1" />
+      <path d="M8 20 Q20 9 32 20 Q20 31 8 20 Z" stroke-width="1" />
+      <circle cx="20" cy="20" r="4.5" stroke-width="0.9" />
+      <circle cx="20" cy="20" r="1.7" fill="currentColor" stroke="none" />
+      <path d="M20 5 V9 M20 31 V35 M11 8 L13 11 M29 8 L27 11 M11 32 L13 29 M29 32 L27 29" stroke-width="0.9" />
+    </svg>
+    <p class="eyebrow">An Informative Tarot Reading of Digital Media</p>
+    <p class="entrance-title" id="entrance-title">The Digital Media Arcana</p>
+    <button class="entrance-button" id="entrance-button" type="button">Enter the Arcana</button>
+    <p class="entrance-note">♪ This site plays ambient music</p>
+  </div>
+
+
   <!-- ============ SECTION 1: HEADER / NAV BAR ============ -->
   <header class="site-header">
 
@@ -65,9 +86,8 @@
       </button>
     </nav>
 
-    <!-- Hidden HTML5 audio player. script.js starts it when the page opens.
-         Browsers often block sound until the visitor does something, so if that happens
-         the music starts on the visitor's first click or key press instead.
+    <!-- Hidden HTML5 audio player. script.js starts it when the visitor presses
+         "Enter the Arcana" on the entrance screen (see the top of this file).
          loop = when the 41-minute track ends it starts again, so there is no silence.
          preload="none" = the 38 MB file is only downloaded once the music starts. -->
     <!-- Replace with the final track. Credit it in the footer. -->

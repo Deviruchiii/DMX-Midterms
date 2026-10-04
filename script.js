@@ -7,7 +7,8 @@
    4. Flip a card
    5. Description bubble (open / close / position)
    6. Audio toggle
-   7. Start the page
+   7. Entrance screen (starts the music)
+   8. Start the page
    ===================================================== */
 
 
@@ -137,6 +138,8 @@ const siteHeader = document.querySelector(".site-header");
 const audio = document.getElementById("ambient-audio");
 const audioToggle = document.getElementById("audio-toggle");
 const audioIcon = document.getElementById("audio-icon");
+const entrance = document.getElementById("entrance");
+const entranceButton = document.getElementById("entrance-button");
 
 // Checks if the user's device asks for less animation
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -481,46 +484,20 @@ window.addEventListener("resize", function () {
 
 /* ---------- 6. AUDIO TOGGLE ---------- */
 
+// Starts the music. play() returns a promise; .catch handles errors (e.g. file missing)
+function playMusic() {
+  audio.play().catch(function (error) {
+    console.log("Audio could not play. Is audio/ambient-audio.mp3 in place?", error);
+  });
+}
+
 // Play the audio if it is paused, pause it if it is playing
 audioToggle.addEventListener("click", function () {
-  // The visitor is using the button now, so the "first action" helper below is not needed
-  stopWaitingForFirstAction();
-
   if (audio.paused) {
-    // play() returns a promise; .catch handles errors (e.g. file missing)
-    audio.play().catch(function (error) {
-      console.log("Audio could not play. Is audio/ambient-audio.mp3 in place?", error);
-    });
+    playMusic();
   } else {
     audio.pause();
   }
-});
-
-// --- Start the music automatically ---
-// Browsers usually block sound until the visitor has clicked or pressed a key.
-// So we try to play right away, and if the browser says no, we wait for the
-// visitor's first click or key press and start the music then.
-
-// Runs on the visitor's first click or key press
-function startOnFirstAction() {
-  audio.play()
-    .then(stopWaitingForFirstAction)   // it worked: stop listening
-    .catch(function () {
-      // Still blocked (some keys do not count as an action). Keep waiting for the next one.
-    });
-}
-
-// Removes the two "first action" listeners so the music is not started twice
-function stopWaitingForFirstAction() {
-  document.removeEventListener("click", startOnFirstAction);
-  document.removeEventListener("keydown", startOnFirstAction);
-}
-
-// Try to play as soon as the page opens
-audio.play().catch(function () {
-  // Blocked by the browser: start on the first click or key press instead
-  document.addEventListener("click", startOnFirstAction);
-  document.addEventListener("keydown", startOnFirstAction);
 });
 
 // Change the button icon whenever the audio starts or stops
@@ -534,5 +511,40 @@ audio.addEventListener("pause", function () {
 });
 
 
-/* ---------- 7. START THE PAGE ---------- */
+/* ---------- 7. ENTRANCE SCREEN ----------
+   Browsers block sound until the visitor clicks something. The entrance screen
+   gives them one button to click, and that click is what starts the music. */
+
+// The parts of the page behind the entrance screen
+const pageParts = document.querySelectorAll(".site-header, main, .site-footer");
+
+// Show the entrance screen: lock the page behind it and focus the button
+function openEntrance() {
+  document.documentElement.classList.add("entrance-open");   // stop page scrolling (style.css)
+
+  // inert = the keyboard and screen readers skip these parts while the screen is up
+  pageParts.forEach(function (part) {
+    part.inert = true;
+  });
+
+  entranceButton.focus();
+}
+
+// Runs when "Enter the Arcana" is clicked: start the music and reveal the page
+function enterSite() {
+  playMusic();
+
+  entrance.classList.add("hidden");                           // fades out (style.css)
+  document.documentElement.classList.remove("entrance-open");
+
+  pageParts.forEach(function (part) {
+    part.inert = false;
+  });
+}
+
+entranceButton.addEventListener("click", enterSite);
+
+
+/* ---------- 8. START THE PAGE ---------- */
 buildCards();
+openEntrance();
