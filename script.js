@@ -24,7 +24,7 @@ const cards = [
     keyword: "BUILDING BLOCKS",
     image: "images/card-image-01.webp",
     imageAlt: "Placeholder: close-up of a pixel grid",
-    description: "A raster image is a grid of tiny squares called pixels, and each pixel stores one color value. The image's size is its width times its height in pixels. Editing changes individual pixels, which makes raster ideal for photographs. The detail is fixed when the image is created, though."
+    description: "Geometric primitives are the simplest shapes a vector image is made from. They include lines, polylines, circles, rectangles, ellipses, and polygons. Even a detailed illustration, like a car, is just many primitives layered and combined. Because each primitive is stored as math instead of pixels, it stays sharp at any size."
   },
   {
     numeral: "II",
@@ -34,7 +34,7 @@ const cards = [
     keyword: "SMOOTH PATHS",
     image: "images/card-image-02.webp",
     imageAlt: "Placeholder: simple vector shape with anchor points",
-    description: "A vector image does not store pixels. It stores shapes as math: points, lines, and curves, plus a fill color and a stroke. The file describes how to draw the picture instead of what every pixel looks like. SVG is the standard vector format on the web."
+    description: "A Bézier curve is a parametric curve named after Pierre Bézier, who used it to design Renault car bodies in the 1960s. A cubic Bézier is defined by four points. P0 and P3 are where the curve starts and ends, and P1 and P2 are control points that pull the curve into shape. Unlike a polygonal line made of short straight segments, a Bézier curve looks smooth at every scale."
   },
   {
     numeral: "III",
@@ -44,7 +44,7 @@ const cards = [
     keyword: "PRINT STANDARD",
     image: "images/card-image-03.webp",
     imageAlt: "Placeholder: blurry raster next to a sharp vector",
-    description: "When you enlarge a raster image, the software has to invent new pixels, so the picture turns blurry or blocky. A vector image is simply redrawn at the new size and stays sharp. Its file size also stays the same no matter how large it is displayed."
+    description: "EPS is Adobe's format from the 1980s and has long been the standard interchange format of the print industry. It is a PostScript-based file that describes an image or drawing, so it works directly with PostScript printers. Designers still use it to send logos and artwork to print shops."
   },
   {
     numeral: "IV",
@@ -54,7 +54,7 @@ const cards = [
     keyword: "NATIVE FORMAT",
     image: "images/card-image-04.webp",
     imageAlt: "Placeholder: color gradient with visible banding",
-    description: "Color depth is the number of bits used for each pixel. Using 8 bits for each of the red, green, and blue channels gives 24-bit color, which is about 16.7 million colors. An indexed image uses 8 bits total, so it can show only 256 colors picked from a lookup table (LUT). Fewer bits make smaller files but can cause visible banding in gradients."
+    description: "Ai is the native file format of Adobe Illustrator, first released in 1987. It stores single-page vector artwork and began as a modified version of the EPS format. Because Illustrator is an industry-standard tool, Ai files are widely supported across design software."
   },
   {
     numeral: "V",
@@ -64,7 +64,7 @@ const cards = [
     keyword: "OPEN STANDARD",
     image: "images/card-image-05.webp",
     imageAlt: "Placeholder: flat-color image with repeating rows",
-    description: "Lossless compression shrinks a file without throwing anything away. Run-length encoding (RLE) stores a run such as '20 white pixels' instead of listing each pixel. PNG uses the DEFLATE method, which combines LZ77 and Huffman coding. You get the exact original back, which suits logos, text, and flat colors."
+    description: "SVG is the W3C's standard vector format, introduced in 1999. It is written in XML, so you can open an SVG and read its shapes as plain text code. It also supports interactivity and animation, which is why browsers can display it natively. The card backs on this site are SVG."
   },
   {
     numeral: "VI",
@@ -74,7 +74,7 @@ const cards = [
     keyword: "WEB ANIMATION",
     image: "images/card-image-06.webp",
     imageAlt: "Placeholder: photo with visible JPEG blocks",
-    description: "Lossy compression permanently removes detail that people rarely notice. JPEG splits the image into 8x8 blocks, converts each block with a DCT (discrete cosine transform), and then quantizes it to drop fine detail. The files become much smaller. Saving again and again adds visible blocky artifacts."
+    description: "SWF is the Flash file format, created by Macromedia in 1996 and later acquired by Adobe. Its name comes from \"ShockWave Flash.\" It powered animated websites, games, and cartoons in the early web, but browsers phased it out after Flash Player reached end of life in 2020."
   },
   {
     numeral: "VII",
@@ -84,7 +84,7 @@ const cards = [
     keyword: "ZOOM",
     image: "images/card-image-07.webp",
     imageAlt: "Placeholder: file size comparison of image formats",
-    description: "WebP is a modern raster format that supports lossy compression (based on the VP8 video codec), lossless compression, and transparency. At similar visual quality its files are usually smaller than JPEG or PNG. All major browsers support it, so it is a good default for web photos."
+    description: "Scaling changes the size of an object by expanding or compressing its dimensions. It works by multiplying the original coordinates by a scaling factor: X′ = X · Sx and Y′ = Y · Sy. Because vectors are stored as coordinates, scaling them up never causes pixelation."
   },
   {
     numeral: "VIII",
@@ -94,7 +94,7 @@ const cards = [
     keyword: "ANGLED SPIN",
     image: "images/card-image-08.webp",
     imageAlt: "Placeholder: bezier curve with control handles",
-    description: "A Bezier curve is defined by anchor points and control handles. Dragging a handle bends the curve smoothly without adding any new points. A few numbers can describe a complex outline, which is why vector shapes stay so small. This is what the pen tool in a drawing program creates."
+    description: "Rotation turns an object by a particular angle, called theta (θ), around its origin. Every point in the shape is repositioned using that angle while the shape itself stays intact. In code, this is the <code>rotate()</code> function."
   },
   {
     numeral: "IX",
@@ -104,7 +104,7 @@ const cards = [
     keyword: "DIRECTIONAL SHIFT",
     image: "images/card-image-09.webp",
     imageAlt: "Placeholder: icons for photo, logo, and screenshot",
-    description: "Pick the format that matches the content. Photographs work best as lossy raster (WebP or JPEG). Logos, icons, and diagrams work best as SVG. Screenshots with sharp text are best kept lossless, such as PNG. Every choice trades file size against quality and flexibility."
+    description: "Translation moves an object to a different position on the screen without changing its size or shape. Each point is moved by adding translation values to its original coordinates: X′ = X + tx and Y′ = Y + ty. In code, this is the <code>translate()</code> function."
   }
 ];
 
@@ -254,7 +254,8 @@ function openBubble(index) {
 
   bubbleTitle.textContent = data.numeral + " · " + data.title + " ";
   bubbleTitle.appendChild(concept);
-  bubbleBody.textContent = data.description;
+  // innerHTML (not textContent) so <code> tags inside a description work
+  bubbleBody.innerHTML = data.description;
 
   positionBubble(index);
   bubble.classList.add("open");
