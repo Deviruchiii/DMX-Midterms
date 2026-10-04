@@ -28,7 +28,6 @@
   --color-parchment: #F6F0E0;   /* face-up card */
   --color-ink: #1A1A1A;         /* headings on light backgrounds */
   --color-ink-soft: #4D4D4D;    /* body text on light backgrounds */
-  --color-spec-bg: #F2F2F2;     /* spec section background */
   --color-footer: #333333;
 
   /* Font stack: Inter first, then safe fallbacks */
@@ -79,6 +78,9 @@ a { color: inherit; }
 
 /* ---------- 3. HEADER ---------- */
 .site-header {
+  position: sticky;                /* stays at the top while the page scrolls */
+  top: 0;
+  z-index: 20;                     /* above the cards and the bubble (z-index 10) */
   display: flex;
   justify-content: space-between;  /* brand on the left, nav on the right */
   align-items: center;
@@ -449,9 +451,8 @@ button:focus-visible {
 /* ---------- 7. TECHNICAL MEDIA SPEC TABLE ---------- */
 .media-spec {
   padding: 72px 160px 88px;
-  background: var(--color-spec-bg);
-  border-top: 1px solid #D1D1D1;
-  color: var(--color-ink-soft);
+  /* no background: the section shows the page background, so it blends in */
+  color: var(--color-muted);
 }
 
 .media-spec h2 {
@@ -459,13 +460,13 @@ button:focus-visible {
   font-size: 32px;
   font-weight: 700;
   letter-spacing: -0.005em;        /* -0.5% tracking */
-  color: var(--color-ink);
+  color: var(--color-text-light);
 }
 
+/* The table is transparent: only thin gold lines separate it from the page */
 .table-wrap {
   overflow-x: auto;                /* scroll sideways on small screens */
-  background: #FFFFFF;
-  border: 1px solid #D1D1D1;
+  border: 1px solid rgba(212, 175, 90, 0.4);
   border-radius: 8px;
 }
 
@@ -478,29 +479,25 @@ table {
 
 thead th {
   padding: 14px 20px;
-  background: #E6E6E6;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-align: left;
   text-transform: uppercase;
-  color: var(--color-ink);
+  color: var(--color-gold);
 }
 
 tbody td {
   padding: 16px 20px;
-  border-top: 1px solid #E0E0E0;
+  border-top: 1px solid rgba(212, 175, 90, 0.25);
   font-size: 14px;
   line-height: 1.5;
 }
 
 tbody td:first-child {             /* asset name column is bolder */
   font-weight: 600;
-  color: var(--color-ink);
+  color: var(--color-text-light);
 }
-
-/* Zebra striping: every second row gets a light gray background */
-tbody tr:nth-child(even) { background: #F9F9F9; }
 
 
 /* ---------- 8. FOOTER ---------- */
