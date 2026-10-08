@@ -6,9 +6,10 @@
    3. Build the cards from the data
    4. Flip a card
    5. Description bubble (open / close / position)
-   6. Audio toggle
-   7. Entrance screen (starts the music)
-   8. Start the page
+   6. Raster vs vector zoom test
+   7. Audio toggle
+   8. Entrance screen (starts the music)
+   9. Start the page
    ===================================================== */
 
 
@@ -140,6 +141,11 @@ const audioToggle = document.getElementById("audio-toggle");
 const audioIcon = document.getElementById("audio-icon");
 const entrance = document.getElementById("entrance");
 const entranceButton = document.getElementById("entrance-button");
+const zoomTool = document.getElementById("zoom-tool");
+const zoomSlider = document.getElementById("zoom-slider");
+const zoomValue = document.getElementById("zoom-value");
+const zoomReadout = document.getElementById("zoom-readout");
+const zoomVector = document.getElementById("zoom-vector");
 
 // Checks if the user's device asks for less animation
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -482,7 +488,42 @@ window.addEventListener("resize", function () {
 });
 
 
-/* ---------- 6. AUDIO TOGGLE ---------- */
+/* ---------- 6. RASTER VS VECTOR ZOOM TEST ----------
+   INTERACTIVE ELEMENT: one slider zooms two copies of the card back.
+   The raster copy is a PNG (a fixed grid of 260 x 420 pixels).
+   The vector copy is the inline SVG, which the browser redraws from its shapes. */
+
+// Put the same SVG the cards use into the vector window (see cardBackSvg in section 3)
+function buildZoomVector() {
+  zoomVector.innerHTML = cardBackSvg;
+  zoomVector.querySelector("svg").classList.add("zoom-art");  // sized and scaled in style.css
+}
+
+// Runs every time the slider moves
+function updateZoom() {
+  const zoom = Number(zoomSlider.value);   // the slider gives text, Number() makes it a number
+
+  // Both pictures use transform: scale(var(--zoom)) in style.css, so they zoom together
+  zoomTool.style.setProperty("--zoom", zoom);
+
+  zoomValue.textContent = zoom + "×";
+  zoomSlider.setAttribute("aria-valuetext", zoom + " times");  // what screen readers announce
+
+  // Explain what the visitor is looking at
+  if (zoom === 1) {
+    zoomReadout.textContent = "1× is actual size. Each stored pixel covers one screen pixel, so the two cards look the same.";
+  } else {
+    zoomReadout.textContent = "At " + zoom + "×, each stored pixel of the PNG is drawn as a block of " +
+      zoom + " × " + zoom + " screen pixels. The SVG has no pixels to enlarge: " +
+      "it is redrawn from its shapes, so it stays sharp.";
+  }
+}
+
+// "input" fires continuously while the slider is dragged
+zoomSlider.addEventListener("input", updateZoom);
+
+
+/* ---------- 7. AUDIO TOGGLE ---------- */
 
 // Starts the music. play() returns a promise; .catch handles errors (e.g. file missing)
 function playMusic() {
@@ -511,7 +552,7 @@ audio.addEventListener("pause", function () {
 });
 
 
-/* ---------- 7. ENTRANCE SCREEN ----------
+/* ---------- 8. ENTRANCE SCREEN ----------
    Browsers block sound until the visitor clicks something. The entrance screen
    gives them one button to click, and that click is what starts the music. */
 
@@ -545,6 +586,8 @@ function enterSite() {
 entranceButton.addEventListener("click", enterSite);
 
 
-/* ---------- 8. START THE PAGE ---------- */
+/* ---------- 9. START THE PAGE ---------- */
 buildCards();
+buildZoomVector();
+updateZoom();     // some browsers remember the slider's position after a reload
 openEntrance();

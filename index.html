@@ -76,6 +76,7 @@
     <!-- Right side: navigation links + audio button -->
     <nav class="main-nav" aria-label="Main navigation">
       <a href="#intro">How to Read</a>
+      <a href="#raster-vs-vector">Raster vs Vector</a>
       <a href="#media-spec">Media Spec</a>
 
       <!-- AUDIO REQUIREMENT: button that plays/pauses the <audio> element below.
@@ -138,7 +139,101 @@
     </section>
 
 
-    <!-- ============ SECTION 4: TECHNICAL MEDIA SPEC TABLE ============ -->
+    <!-- ============ SECTION 4: RASTER VS VECTOR ============
+         Explains the two ways a picture can be stored, then lets the visitor test it:
+         the slider zooms the SAME card back twice, once as a PNG and once as an SVG. -->
+    <section id="raster-vs-vector" class="compare">
+      <p class="eyebrow">Two Ways to Store a Picture</p>
+      <h2>Raster vs Vector</h2>
+      <p class="compare-intro">
+        Every digital image is saved in one of two ways: as a grid of colored pixels, or as a set of
+        drawing instructions. The difference is easy to miss at normal size and impossible to miss when you zoom in.
+      </p>
+
+      <!-- Two columns of instructional text -->
+      <div class="compare-columns">
+        <div class="compare-column">
+          <h3>Raster</h3>
+          <p>
+            A raster image is a grid of pixels. The file stores one color value for every pixel, so its
+            detail is fixed at the moment it is saved. Enlarging it cannot add detail: each pixel is
+            simply drawn bigger, and the picture turns blocky.
+          </p>
+          <ul class="compare-facts">
+            <li><strong>Stored as</strong> a grid of pixels</li>
+            <li><strong>File size</strong> grows with the number of pixels</li>
+            <li><strong>Formats</strong> PNG, JPG, WebP, GIF</li>
+            <li><strong>Best for</strong> photographs and detailed textures</li>
+          </ul>
+        </div>
+
+        <div class="compare-column">
+          <h3>Vector</h3>
+          <p>
+            A vector image is a list of shapes, paths and curves described by coordinates. The browser
+            redraws those shapes from the math every time the size changes, so the edges stay sharp
+            at any zoom level.
+          </p>
+          <ul class="compare-facts">
+            <li><strong>Stored as</strong> shapes described by math</li>
+            <li><strong>File size</strong> grows with the number of shapes</li>
+            <li><strong>Formats</strong> SVG, Ai, EPS</li>
+            <li><strong>Best for</strong> logos, icons, diagrams and type</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE ELEMENT: the zoom test.
+           script.js reads the slider and writes its value into the CSS variable --zoom
+           on this box. Both pictures below use that variable, so they zoom together. -->
+      <div class="zoom-tool" id="zoom-tool">
+        <h3>Zoom Test: One Card, Two Formats</h3>
+
+        <div class="zoom-control">
+          <label for="zoom-slider">Zoom</label>
+          <input id="zoom-slider" type="range" min="1" max="16" step="1" value="1">
+          <output id="zoom-value" for="zoom-slider">1×</output>
+        </div>
+
+        <!-- The sentence under the slider is rewritten by script.js as the slider moves -->
+        <p class="zoom-readout" id="zoom-readout">
+          1× is actual size. Each stored pixel covers one screen pixel, so the two cards look the same.
+        </p>
+
+        <div class="zoom-panels">
+          <figure class="zoom-panel">
+            <!-- RASTER IMAGE: a PNG of the card back, saved at 260 x 420 pixels -->
+            <div class="zoom-view">
+              <img class="zoom-art zoom-raster" src="images/card-back.png" width="260" height="420"
+                   alt="The card back saved as a PNG. It breaks into square pixels as the zoom goes up.">
+            </div>
+            <figcaption><strong>Raster</strong> card-back.png, 260 × 420 pixels</figcaption>
+          </figure>
+
+          <figure class="zoom-panel">
+            <!-- VECTOR GRAPHIC: script.js puts the same inline SVG the cards use in here -->
+            <div class="zoom-view" id="zoom-vector" role="img"
+                 aria-label="The card back drawn as an SVG. Its lines stay sharp as the zoom goes up."></div>
+            <figcaption><strong>Vector</strong> inline SVG, drawn from shapes</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="compare-note">
+        <h3>Where Compression Fits</h3>
+        <p>
+          Raster files hold so many pixel values that they are almost always compressed.
+          Lossless compression, used by PNG, rebuilds every pixel exactly. Lossy compression, used by JPG,
+          throws away detail the eye is less likely to notice. That makes much smaller files, but it can
+          leave visible marks called artifacts. Vector files start out small because they store instructions
+          instead of pixels, and because an SVG is plain text it shrinks further with lossless GZIP.
+          The table below lists what each file on this page uses.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ============ SECTION 5: TECHNICAL MEDIA SPEC TABLE ============ -->
     <section id="media-spec" class="media-spec">
       <h2>Technical Media Spec</h2>
 
@@ -158,13 +253,20 @@
             <!-- One row per media file used on this page.
                  "raw" = the size the image would be with no compression (width x height x 4 bytes per pixel).
                  All card images are PNG with a transparent background (the alpha channel).
+                 card-back.png is the raster copy used in the Raster vs Vector zoom test.
                  The audio "PCM" size = the same 41:57 as uncompressed 16-bit, 48 kHz stereo sound.
                  If you swap a file, update its row. -->
             <tr>
-              <td>card-back.svg</td>
+              <td>Card back (inline SVG, source file card-back.svg)</td>
               <td>3.3 KB → 1.1 KB gzipped</td>
               <td>Vector (no bit depth)</td>
               <td>Lossless (GZIP, DEFLATE)</td>
+            </tr>
+            <tr>
+              <td>card-back.png</td>
+              <td>426.6 KB raw → 22.6 KB</td>
+              <td>8-bit per channel + alpha (32-bit RGBA)</td>
+              <td>Lossless (PNG, DEFLATE)</td>
             </tr>
             <tr>
               <td>geometric-primitives.png</td>
@@ -234,7 +336,7 @@
   </main>
 
 
-  <!-- ============ SECTION 5: FOOTER ============ -->
+  <!-- ============ SECTION 6: FOOTER ============ -->
   <footer class="site-footer">
     <div class="footer-text">
       <span>© 2026 Aldrin Paltao · Digital Media Midterm</span>
