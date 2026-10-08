@@ -1,5 +1,5 @@
 /* =====================================================
-   THE DIGITAL MEDIA ARCANA - script.js
+   THE RASTER AND VECTOR ARCANA - script.js
    Sections:
    1. Card data (edit your content here!)
    2. Grab page elements
